@@ -1,0 +1,4149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0f">
+<title>Admin — KOFA X Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-page:      #f7f8fa;
+  --bg-surface:   #ffffff;
+  --bg-raised:    #ffffff;
+  --bg-sunken:    #f2f3f6;
+  --bg-input:     #f5f6f8;
+  --bg-input-focus:#ffffff;
+  --border:       #e4e6eb;
+  --border-strong:#d3d6dd;
+  --border-focus: #0b0b0f;
+  --text:         #0b0b0f;
+  --text-2:       #4a4d57;
+  --text-3:       #7a7e8a;
+  --text-inverse: #ffffff;
+  --accent:       #0b0b0f;
+  --accent-hover: #1f2027;
+  --accent-soft:  rgba(11, 11, 15, 0.05);
+  --success:      #0d7d4d;
+  --success-bg:   #eaf6ef;
+  --success-border:#c3e5d2;
+  --warning:      #8a5a00;
+  --warning-bg:   #fdf6e7;
+  --warning-border:#f0dcae;
+  --danger:       #b42318;
+  --danger-bg:    #fdecea;
+  --danger-border:#f5c4c0;
+  --info-bg:      #eef1f6;
+  --info-border:  #d6dbe4;
+  --role-payment: #4a4d57;
+  --role-payment-bg: #eef1f6;
+  --role-payment-border: #d6dbe4;
+  --role-checkin: #6b4d99;
+  --role-checkin-bg: #f0ebf9;
+  --role-checkin-border: #d8ccee;
+  --wa:           #25d366;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 22px; --r-full: 999px;
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+  --f-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms; --dur: 220ms; --dur-slow: 340ms;
+  --sidebar-w: 240px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page:      #0a0a0c;
+    --bg-surface:   #121216;
+    --bg-raised:    #17171d;
+    --bg-sunken:    #0e0e12;
+    --bg-input:     #1a1a20;
+    --bg-input-focus:#1f1f27;
+    --border:       #26262e;
+    --border-strong:#34343d;
+    --border-focus: #f0f0f4;
+    --text:         #f2f2f5;
+    --text-2:       #a8abb5;
+    --text-3:       #6f727d;
+    --text-inverse: #0a0a0c;
+    --accent:       #f2f2f5;
+    --accent-hover: #ffffff;
+    --accent-soft:  rgba(255, 255, 255, 0.06);
+    --success:      #4ec38a;
+    --success-bg:   #0f2318;
+    --success-border:#1f4531;
+    --warning:      #e0b155;
+    --warning-bg:   #221a09;
+    --warning-border:#4a3a15;
+    --danger:       #f08376;
+    --danger-bg:    #2a1210;
+    --danger-border:#4d2320;
+    --info-bg:      #16171c;
+    --info-border:  #282a32;
+    --role-payment: #a8abb5;
+    --role-payment-bg: #16171c;
+    --role-payment-border: #282a32;
+    --role-checkin: #b39ddb;
+    --role-checkin-bg: #1c1528;
+    --role-checkin-border: #2e2340;
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--f-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg-page);
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: none; background: none; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.page-loader {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--s-4);
+  background: var(--bg-page);
+  padding: var(--s-5);
+  text-align: center;
+}
+.page-loader .spinner {
+  width: 44px; height: 44px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+.page-loader h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 4px; }
+.page-loader p { font-size: 13.5px; color: var(--text-2); max-width: 40ch; line-height: 1.55; }
+.page-loader .err-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--s-3);
+}
+.page-loader .err-icon svg { width: 24px; height: 24px; }
+
+.auth-gate {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-5);
+  background: var(--bg-page);
+}
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-8) var(--s-6);
+}
+.auth-brand { display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-6); }
+.auth-mark {
+  width: 40px; height: 40px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: var(--text-inverse);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.4px;
+}
+.auth-brand-text .t { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+.auth-brand-text .s { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+.auth-card h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: var(--s-2); }
+.auth-card p.lede { font-size: 13.5px; color: var(--text-2); line-height: 1.55; margin-bottom: var(--s-5); }
+.auth-event-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-5);
+}
+.auth-event-pill .lead {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--text-inverse);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.auth-event-pill .lead svg { width: 16px; height: 16px; }
+.auth-event-pill .info { flex: 1; min-width: 0; }
+.auth-event-pill .info .name {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.auth-event-pill .info .meta { font-size: 11.5px; color: var(--text-3); }
+
+.app { display: none; min-height: 100dvh; grid-template-columns: var(--sidebar-w) 1fr; }
+@media (min-width: 900px) { .app.active { display: grid; } }
+.app.active { display: block; }
+@media (min-width: 900px) { .app.active { display: grid; } }
+
+.sidebar {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  padding: var(--s-5) 0;
+  display: none;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+}
+@media (min-width: 900px) { .sidebar { display: flex; } }
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 0 var(--s-5) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--s-4);
+}
+.sidebar-mark {
+  width: 32px; height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--text-inverse);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: -0.4px;
+}
+.sidebar-brand-text .t { font-weight: 700; font-size: 13.5px; letter-spacing: -0.2px; }
+.sidebar-brand-text .s { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+
+.sidebar-event {
+  padding: 0 var(--s-5) var(--s-4);
+  margin-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-event .label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+.sidebar-event .name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+  margin-bottom: 2px;
+}
+.sidebar-event .meta { font-size: 11.5px; color: var(--text-3); }
+
+.nav { display: flex; flex-direction: column; gap: 2px; padding: 0 var(--s-3); }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 10px var(--s-3);
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-align: left;
+  transition: all var(--dur) var(--ease);
+  width: 100%;
+}
+.nav-item:hover { background: var(--accent-soft); color: var(--text); }
+.nav-item.active { background: var(--bg-sunken); color: var(--text); }
+.nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+.nav-item .nav-badge {
+  margin-left: auto;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: var(--r-full);
+  color: var(--text-3);
+}
+.nav-item.active .nav-badge { background: var(--bg-surface); }
+.nav-item.hidden { display: none; }
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-3);
+  padding: var(--s-4) var(--s-3) var(--s-2);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: var(--s-4) var(--s-3) 0;
+  border-top: 1px solid var(--border);
+}
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--bg-sunken);
+  border-radius: var(--r-sm);
+  margin-bottom: var(--s-2);
+}
+.sidebar-user .avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text-2);
+  flex-shrink: 0;
+}
+.sidebar-user .who { flex: 1; min-width: 0; }
+.sidebar-user .who .n {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sidebar-user .who .r {
+  font-size: 10.5px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+  margin-top: 1px;
+}
+
+.mobile-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+@media (min-width: 900px) { .mobile-bar { display: none; } }
+.mobile-bar-brand { display: flex; align-items: center; gap: var(--s-2); min-width: 0; flex: 1; }
+.mobile-bar-mark {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--text-inverse);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 10.5px;
+  flex-shrink: 0;
+}
+.mobile-bar-brand .t {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-bottom {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  z-index: 20;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  overflow-x: auto;
+}
+@media (min-width: 900px) { .mobile-bottom { display: none; } }
+.mobile-nav-item {
+  flex: 1 0 auto;
+  min-width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 6px;
+  color: var(--text-3);
+  font-size: 10.5px;
+  font-weight: 600;
+  transition: color var(--dur) var(--ease);
+  position: relative;
+}
+.mobile-nav-item.active { color: var(--text); }
+.mobile-nav-item svg { width: 20px; height: 20px; }
+.mobile-nav-item.hidden { display: none; }
+.mobile-nav-item .nav-badge {
+  position: absolute;
+  transform: translate(16px, -4px);
+  background: var(--danger);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: var(--r-full);
+  min-width: 16px;
+  text-align: center;
+}
+
+.content { padding: var(--s-6) var(--s-5) 100px; max-width: 1200px; }
+@media (min-width: 900px) { .content { padding: var(--s-8) var(--s-8) var(--s-8); } }
+@media (max-width: 899px) { .content { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); } }
+
+.view { display: none; }
+.view.active { display: block; animation: fadeUp var(--dur-slow) var(--ease); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.view-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+  flex-wrap: wrap;
+}
+.view-head-text { flex: 1; min-width: 220px; }
+.view-head h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; }
+@media (min-width: 640px) { .view-head h1 { font-size: 24px; } }
+.view-head .sub { font-size: 13.5px; color: var(--text-2); line-height: 1.5; }
+.view-head .actions { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: var(--r-sm);
+  transition: all var(--dur) var(--ease);
+  min-height: 38px;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.btn-primary { background: var(--accent); color: var(--text-inverse); }
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+.btn-primary:active:not(:disabled) { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+.btn-secondary:hover:not(:disabled) { background: var(--bg-input); border-color: var(--text-3); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-2);
+  padding: 8px 10px;
+  min-height: 34px;
+  font-size: 13px;
+}
+.btn-ghost:hover { background: var(--accent-soft); color: var(--text); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover:not(:disabled) { background: #0a6a42; }
+@media (prefers-color-scheme: dark) {
+  .btn-success { color: #0a0a0c; }
+  .btn-success:hover:not(:disabled) { background: #6bd19c; }
+}
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #9a1e14; }
+@media (prefers-color-scheme: dark) {
+  .btn-danger { color: #0a0a0c; }
+  .btn-danger:hover:not(:disabled) { background: #f59b8f; }
+}
+.btn-danger-outline {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+.btn-danger-outline:hover:not(:disabled) { background: var(--danger-bg); }
+.btn-block { width: 100%; }
+.btn-sm { padding: 6px 11px; font-size: 12.5px; min-height: 32px; }
+.btn-sm svg { width: 13px; height: 13px; }
+
+.btn .btn-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.field { margin-bottom: var(--s-4); }
+.field:last-of-type { margin-bottom: 0; }
+.label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.label .req { color: var(--danger); margin-left: 2px; }
+.label .hint { font-size: 11.5px; font-weight: 500; color: var(--text-3); }
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-input);
+  color: var(--text);
+  transition: border-color var(--dur) var(--ease),
+              background var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+  min-height: 42px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.input::placeholder, .textarea::placeholder { color: var(--text-3); }
+.input:hover, .select:hover, .textarea:hover { border-color: var(--text-3); }
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.textarea { resize: vertical; min-height: 72px; font-family: inherit; }
+.input-mono { font-family: var(--f-mono); letter-spacing: 0.5px; }
+
+.field.error .input,
+.field.error .select { border-color: var(--danger); background: var(--danger-bg); }
+.error-msg {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--danger);
+  margin-top: 6px;
+}
+.error-msg svg { width: 13px; height: 13px; flex-shrink: 0; }
+.field.error .error-msg { display: flex; }
+.help { font-size: 12px; color: var(--text-3); margin-top: 5px; line-height: 1.45; }
+.form-row { display: grid; grid-template-columns: 1fr; gap: var(--s-4); }
+@media (min-width: 560px) { .form-row.two { grid-template-columns: 1fr 1fr; } }
+
+.image-preview {
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--bg-sunken);
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: 200px;
+}
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.image-preview.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-3);
+  font-size: 12.5px;
+  font-weight: 500;
+  border-style: dashed;
+  border-color: var(--border-strong);
+  padding: var(--s-4);
+  text-align: center;
+}
+.image-preview.empty svg { width: 22px; height: 22px; opacity: 0.6; }
+.image-preview .remove-img {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px; height: 30px;
+  border-radius: var(--r-sm);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  transition: all var(--dur) var(--ease);
+}
+.image-preview .remove-img:hover { background: rgba(0,0,0,0.75); }
+.image-preview .remove-img svg { width: 14px; height: 14px; }
+
+.phone-input-wrap {
+  display: flex;
+  gap: var(--s-2);
+  align-items: stretch;
+}
+.phone-input-wrap .prefix {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: var(--text-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.phone-input-wrap .input { flex: 1; }
+.wa-preview {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  word-break: break-all;
+}
+.wa-preview svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--wa); }
+.wa-preview strong {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: var(--s-5);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.card-head h2 { font-size: 14px; font-weight: 700; letter-spacing: -0.1px; }
+.card-head .card-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.card-body { padding: var(--s-5); }
+.card-body.tight { padding: var(--s-2) 0; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--dur) var(--ease);
+}
+.row:last-child { border-bottom: none; }
+.row.clickable { cursor: pointer; }
+.row.clickable:hover { background: var(--bg-sunken); }
+
+.row-lead {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-2);
+  text-transform: uppercase;
+}
+.row-lead.ok { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
+.row-lead.warn { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-border); }
+.row-lead.bad { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+.row-lead.accent { background: var(--accent); color: var(--text-inverse); border-color: var(--accent); }
+
+.row-info { flex: 1; min-width: 0; }
+.row-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+.row-meta {
+  font-size: 12.5px;
+  color: var(--text-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+}
+.row-meta .sep { color: var(--border-strong); }
+.row-meta .mono { font-family: var(--f-mono); letter-spacing: 0.3px; }
+.row-actions { display: flex; gap: 4px; flex-shrink: 0; flex-wrap: wrap; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+  border: 1px solid;
+  white-space: nowrap;
+}
+.badge .dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.badge.neutral { background: var(--bg-sunken); color: var(--text-2); border-color: var(--border); }
+.badge.success { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
+.badge.warning { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-border); }
+.badge.danger  { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+.badge.payment { background: var(--role-payment-bg); color: var(--role-payment); border-color: var(--role-payment-border); }
+.badge.checkin { background: var(--role-checkin-bg); color: var(--role-checkin); border-color: var(--role-checkin-border); }
+.badge.pending { background: var(--warning-bg); color: var(--warning); border-color: var(--warning-border); }
+.badge.approved { background: var(--success-bg); color: var(--success); border-color: var(--success-border); }
+.badge.rejected { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-border); }
+.badge.queued { background: var(--info-bg); color: var(--text-2); border-color: var(--info-border); }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+}
+@media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+.stat {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+}
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat-sub { font-size: 11.5px; color: var(--text-3); margin-top: 4px; }
+
+/* Event cover mini (bottom of overview) */
+.event-cover-mini {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: linear-gradient(135deg, #1c1d24 0%, #2a2c36 55%, #3a3d4a 100%);
+  margin-bottom: var(--s-4);
+  position: relative;
+}
+.event-cover-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.event-cover-mini::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+.event-cover-mini .event-name {
+  position: absolute;
+  bottom: var(--s-3);
+  left: var(--s-4);
+  right: var(--s-4);
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  align-items: baseline;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row .k {
+  font-size: 12.5px;
+  color: var(--text-3);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.detail-row .v {
+  font-size: 13.5px;
+  color: var(--text);
+  font-weight: 600;
+  text-align: right;
+  word-break: break-word;
+}
+.detail-row .v.mono { font-family: var(--f-mono); letter-spacing: 1px; }
+.detail-row .v a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.detail-row .v.muted { color: var(--text-2); font-weight: 500; }
+
+.empty {
+  text-align: center;
+  padding: var(--s-10) var(--s-5);
+}
+.empty-icon {
+  width: 52px; height: 52px;
+  margin: 0 auto var(--s-4);
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+}
+.empty-icon svg { width: 22px; height: 22px; }
+.empty h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.empty p {
+  font-size: 13px;
+  color: var(--text-3);
+  max-width: 36ch;
+  margin: 0 auto var(--s-4);
+  line-height: 1.5;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-sunken) 25%, var(--border) 50%, var(--bg-sunken) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--r-sm);
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skel-row { height: 60px; margin-bottom: 8px; }
+.skel-tile { height: 90px; }
+
+.notice {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  border: 1px solid;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: var(--s-4);
+}
+.notice svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; }
+.notice-body { flex: 1; min-width: 0; }
+.notice-title { font-weight: 700; margin-bottom: 2px; font-size: 13px; }
+.notice-text { color: inherit; opacity: 0.9; }
+.notice.info { background: var(--info-bg); border-color: var(--info-border); color: var(--text-2); }
+.notice.success { background: var(--success-bg); border-color: var(--success-border); color: var(--success); }
+.notice.warning { background: var(--warning-bg); border-color: var(--warning-border); color: var(--warning); }
+.notice.danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-5);
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.search-input-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-input-wrap svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px; height: 15px;
+  color: var(--text-3);
+  pointer-events: none;
+}
+.search-input-wrap input { padding-left: 36px; }
+
+.filter-segmented {
+  display: flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 3px;
+  gap: 2px;
+  overflow-x: auto;
+}
+.filter-segmented button {
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+  border-radius: 6px;
+  transition: all var(--dur) var(--ease);
+  white-space: nowrap;
+  min-height: 30px;
+}
+.filter-segmented button:hover:not(.active) { color: var(--text-2); }
+.filter-segmented button.active { background: var(--bg-sunken); color: var(--text); }
+
+.checkin-hero {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-6) var(--s-5);
+  text-align: center;
+  margin-bottom: var(--s-5);
+}
+.checkin-hero .lead-icon {
+  width: 60px; height: 60px;
+  margin: 0 auto var(--s-4);
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+}
+.checkin-hero .lead-icon svg { width: 26px; height: 26px; }
+.checkin-hero h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 4px; }
+.checkin-hero p {
+  font-size: 13px;
+  color: var(--text-2);
+  max-width: 40ch;
+  margin: 0 auto var(--s-5);
+  line-height: 1.55;
+}
+.checkin-input-wrap {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  gap: var(--s-2);
+}
+.checkin-input-wrap .input { flex: 1; padding: 12px 14px; font-size: 15px; }
+.checkin-input-wrap .input.input-mono { letter-spacing: 1px; }
+
+.checkin-result {
+  margin-top: var(--s-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: none;
+}
+.checkin-result.show { display: block; animation: fadeUp var(--dur-slow) var(--ease); }
+.checkin-result.success { border-color: var(--success-border); background: var(--success-bg); }
+.checkin-result.warning { border-color: var(--warning-border); background: var(--warning-bg); }
+.checkin-result.error { border-color: var(--danger-border); background: var(--danger-bg); }
+.checkin-result .cr-head {
+  padding: var(--s-4);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  border-bottom: 1px solid;
+  border-color: inherit;
+}
+.checkin-result .cr-icon {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.6);
+}
+@media (prefers-color-scheme: dark) { .checkin-result .cr-icon { background: rgba(0,0,0,0.3); } }
+.checkin-result .cr-icon svg { width: 18px; height: 18px; }
+.checkin-result.success .cr-icon { color: var(--success); }
+.checkin-result.warning .cr-icon { color: var(--warning); }
+.checkin-result.error .cr-icon { color: var(--danger); }
+.checkin-result .cr-info { flex: 1; min-width: 0; text-align: left; }
+.checkin-result .cr-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 2px;
+  color: var(--text);
+}
+.checkin-result .cr-status { font-size: 12.5px; color: var(--text-2); }
+.checkin-result .cr-body {
+  padding: var(--s-4);
+  background: var(--bg-surface);
+  border-radius: 0 0 calc(var(--r-md) - 1px) calc(var(--r-md) - 1px);
+}
+.checkin-result .cr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+  margin-bottom: var(--s-4);
+}
+.checkin-result .cr-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-3);
+  margin-bottom: 3px;
+}
+.checkin-result .cr-value {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-word;
+}
+.checkin-result .cr-actions { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+
+.recent-list { max-height: 340px; overflow-y: auto; }
+.recent-list::-webkit-scrollbar { width: 4px; }
+.recent-list::-webkit-scrollbar-track { background: var(--bg-sunken); }
+.recent-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 11, 15, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  animation: backdropIn var(--dur) var(--ease);
+}
+.dialog-backdrop.show { display: flex; }
+@media (min-width: 640px) { .dialog-backdrop { align-items: center; padding: var(--s-5); } }
+@keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
+.dialog {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  width: 100%;
+  max-width: 520px;
+  animation: sheetUp var(--dur-slow) var(--ease);
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+@media (min-width: 640px) {
+  .dialog { border-radius: var(--r-lg); animation: dialogIn var(--dur-slow) var(--ease); }
+}
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes dialogIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+.dialog-grab {
+  width: 36px; height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+  margin: var(--s-3) auto 0;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) { .dialog-grab { display: none; } }
+.dialog-head {
+  padding: var(--s-5) var(--s-6) var(--s-4);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.dialog-head h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 3px; }
+.dialog-head .sub { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.dialog-body { padding: var(--s-5) var(--s-6); overflow-y: auto; flex: 1; }
+.dialog-actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-6) var(--s-5);
+  border-top: 1px solid var(--border);
+  background: var(--bg-sunken);
+  flex-shrink: 0;
+}
+@media (min-width: 480px) { .dialog-actions { flex-direction: row; justify-content: flex-end; } }
+.dialog-actions .btn { min-height: 42px; }
+@media (min-width: 480px) { .dialog-actions .btn { flex: 0 0 auto; min-width: 100px; } }
+.dialog-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--s-4);
+}
+.dialog-icon svg { width: 20px; height: 20px; }
+.dialog-icon.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+.dialog-icon.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.dialog-icon.info { background: var(--info-bg); color: var(--text-2); border: 1px solid var(--info-border); }
+.dialog-icon.success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+
+.toast-host {
+  position: fixed;
+  top: var(--s-5);
+  right: var(--s-5);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: calc(100% - var(--s-8));
+  max-width: 360px;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .toast-host { top: auto; bottom: 80px; left: 50%; transform: translateX(-50%); right: auto; }
+}
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  animation: toastIn var(--dur-slow) var(--ease);
+  pointer-events: auto;
+}
+@media (prefers-color-scheme: dark) { .toast { background: rgba(23, 23, 29, 0.96); } }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.toast.leaving { animation: toastOut var(--dur) var(--ease) forwards; }
+@keyframes toastOut { to { opacity: 0; transform: translateY(-6px); } }
+.toast svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+.toast.success svg { color: var(--success); }
+.toast.error svg { color: var(--danger); }
+.toast.info svg { color: var(--text-2); }
+.toast.warning svg { color: var(--warning); }
+
+.hidden { display: none !important; }
+.text-sm { font-size: 12.5px; color: var(--text-3); line-height: 1.5; }
+.divider { height: 1px; background: var(--border); margin: var(--s-5) 0; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.flex-gap { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+
+.code-inline {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  word-break: break-all;
+}
+
+@media print {
+  .sidebar, .mobile-bar, .mobile-bottom, .btn, .toast-host, .dialog-backdrop { display: none !important; }
+  .app { display: block !important; }
+  .content { padding: 0 !important; max-width: none !important; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="spinner" aria-hidden="true"></div>
+  <div>
+    <h2>Loading event…</h2>
+    <p id="loaderMsg">Verifying your link and checking for an active session.</p>
+  </div>
+</div>
+
+<div class="auth-gate hidden" id="authGate">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="auth-mark" aria-hidden="true">KX</div>
+      <div class="auth-brand-text">
+        <div class="t">KOFA X Events</div>
+        <div class="s">Admin sign in</div>
+      </div>
+    </div>
+
+    <div class="auth-event-pill" id="authEventPill">
+      <div class="lead" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="info">
+        <div class="name" id="authEventName">Loading…</div>
+        <div class="meta" id="authEventMeta">—</div>
+      </div>
+    </div>
+
+    <h1>Sign in</h1>
+    <p class="lede">Use the email and password your organizer gave you.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field" id="f-email">
+        <label class="label" for="inp-email">Email <span class="req">*</span></label>
+        <input class="input" id="inp-email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+        <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter your email</span></div>
+      </div>
+
+      <div class="field" id="f-password">
+        <label class="label" for="inp-password">Password <span class="req">*</span></label>
+        <input class="input" id="inp-password" type="password" autocomplete="current-password" placeholder="Your password" required>
+        <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter your password</span></div>
+      </div>
+
+      <button class="btn btn-primary btn-block" type="submit" id="loginBtn">
+        Sign in
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="app" id="app">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-mark" aria-hidden="true">KX</div>
+      <div class="sidebar-brand-text">
+        <div class="t">KOFA X Events</div>
+        <div class="s">Admin console</div>
+      </div>
+    </div>
+
+    <div class="sidebar-event" id="sidebarEvent">
+      <div class="label">Event</div>
+      <div class="name" id="sidebarEventName">—</div>
+      <div class="meta" id="sidebarEventMeta">—</div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item" data-view="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" data-view="registrations" data-roles="payment_admin,checkin_admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Registrations
+        <span class="nav-badge" id="navBadgeRegs">—</span>
+      </button>
+      <button class="nav-item" data-view="checkin" data-roles="checkin_admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Check-in
+        <span class="nav-badge" id="navBadgeCheckin">—</span>
+      </button>
+      <button class="nav-item" data-view="tickets" data-roles="payment_admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2z"/><line x1="13" y1="5" x2="13" y2="7"/><line x1="13" y1="11" x2="13" y2="13"/><line x1="13" y1="17" x2="13" y2="19"/></svg>
+        Ticket types
+      </button>
+      <button class="nav-item" data-view="autocheckin" data-roles="payment_admin,checkin_admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Auto-checkin
+      </button>
+
+      <div class="nav-section-label">Account</div>
+      <button class="nav-item" data-view="account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Account
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="avatar" id="userAvatar">?</div>
+        <div class="who">
+          <div class="n" id="userName">—</div>
+          <div class="r" id="userRole">—</div>
+        </div>
+      </div>
+      <button class="nav-item" id="signOutBtnSide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign out
+      </button>
+    </div>
+  </aside>
+
+  <div>
+    <div class="mobile-bar">
+      <div class="mobile-bar-brand">
+        <div class="mobile-bar-mark" aria-hidden="true">KX</div>
+        <div class="t" id="mobileBarTitle">Admin console</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="signOutBtnMobile" aria-label="Sign out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+
+    <main class="content">
+
+      <section class="view" id="view-overview">
+        <div class="view-head">
+          <div class="view-head-text">
+            <h1 id="overviewTitle">Overview</h1>
+            <div class="sub" id="overviewSub">Event summary and current status.</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="refreshOverviewBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+        <div id="overviewContent"></div>
+      </section>
+
+      <section class="view" id="view-registrations">
+        <div class="view-head">
+          <div class="view-head-text">
+            <h1>Registrations</h1>
+            <div class="sub" id="regsSub">Browse, search, and manage attendees.</div>
+          </div>
+          <div class="actions" id="regsActions"></div>
+        </div>
+
+        <div class="card">
+          <div class="search-wrap">
+            <div class="search-input-wrap" style="max-width: 340px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="input" id="regSearch" type="search" placeholder="Search name, email, phone or TKT-xxxx">
+            </div>
+            <div class="filter-segmented" id="regFilter">
+              <button data-filter="all" class="active">All</button>
+              <button data-filter="pending">Pending</button>
+              <button data-filter="approved">Approved</button>
+              <button data-filter="rejected">Rejected</button>
+            </div>
+          </div>
+          <div class="card-body tight" id="regList"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-checkin">
+        <div class="view-head">
+          <div class="view-head-text">
+            <h1>Check-in</h1>
+            <div class="sub">Search a ticket or scan a QR to check someone in.</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="refreshCheckinBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+            <button class="btn btn-primary" id="scanBtn" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 012-2h2"/><path d="M17 3h2a2 2 0 012 2v2"/><path d="M21 17v2a2 2 0 01-2 2h-2"/><path d="M7 21H5a2 2 0 01-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
+              Scan
+            </button>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="checkinStats"></div>
+
+        <div class="checkin-hero">
+          <div class="lead-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <h2>Find an attendee</h2>
+          <p>Enter their name, email, phone, or ticket number to look them up.</p>
+          <div class="checkin-input-wrap">
+            <input class="input input-mono" id="checkinSearch" type="search" placeholder="Name, email, phone or TKT-0000" autocomplete="off">
+            <button class="btn btn-primary" id="checkinSearchBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Find
+            </button>
+          </div>
+          <div class="checkin-result" id="checkinResult"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Recently checked in</h2>
+              <div class="card-sub">Latest 20 attendees</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="refreshRecentBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+          </div>
+          <div class="card-body tight recent-list" id="recentList"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-tickets">
+        <div class="view-head">
+          <div class="view-head-text">
+            <h1>Ticket types</h1>
+            <div class="sub">Create and manage the tickets attendees choose from.</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="refreshTicketsBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+            <button class="btn btn-primary" id="newTicketBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New ticket type
+            </button>
+          </div>
+        </div>
+        <div id="ticketsContent"></div>
+      </section>
+
+      <section class="view" id="view-autocheckin">
+        <div class="view-head">
+          <div class="view-head-text">
+            <h1>Auto-checkin</h1>
+            <div class="sub">Issue a token so matching registrations get checked in automatically on approval.</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="refreshAcBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+        <div id="acContent"></div>
+      </section>
+
+      <section class="view" id="view-account">
+        <div class="view-head">
+          <div class="view-head-text">
+            <h1>Account</h1>
+            <div class="sub">Your admin profile and password.</div>
+          </div>
+        </div>
+        <div id="accountContent"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <nav class="mobile-bottom">
+    <button class="mobile-nav-item" data-view="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      <span>Overview</span>
+    </button>
+    <button class="mobile-nav-item" data-view="registrations" data-roles="payment_admin,checkin_admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Regs</span>
+    </button>
+    <button class="mobile-nav-item" data-view="checkin" data-roles="checkin_admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <span>Check-in</span>
+    </button>
+    <button class="mobile-nav-item" data-view="tickets" data-roles="payment_admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2z"/></svg>
+      <span>Tickets</span>
+    </button>
+    <button class="mobile-nav-item" data-view="autocheckin" data-roles="payment_admin,checkin_admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <span>Auto</span>
+    </button>
+    <button class="mobile-nav-item" data-view="account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span>
+    </button>
+  </nav>
+</div>
+
+<div class="toast-host" id="toastHost" aria-live="polite" aria-atomic="true"></div>
+
+<div class="dialog-backdrop" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+  <div class="dialog" role="document">
+    <div class="dialog-grab" aria-hidden="true"></div>
+    <div class="dialog-head">
+      <div class="dialog-icon" id="dialogIcon" aria-hidden="true"></div>
+      <h2 id="dialogTitle">Title</h2>
+      <div class="sub" id="dialogSub"></div>
+    </div>
+    <div class="dialog-body" id="dialogBody"></div>
+    <div class="dialog-actions" id="dialogActions"></div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://kxevents.vercel.app/api/temp-events';
+const SESSION_KEY = 'kx_admin_session';
+
+// Fields a payment admin is allowed to edit here.
+// NOTE: Payment details (bankName/accountNumber/accountName) are intentionally excluded —
+// only the organizer touches those via the super admin page.
+const PAYMENT_ADMIN_EDITABLE = ['description', 'image', 'phone', 'whatsapp'];
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+const state = {
+  eventId: null,
+  event: null,
+  ticketTypes: [],
+  editableFields: [],
+  admin: null,
+  accessToken: null,
+  currentView: null,
+  regs: [],
+  regFilter: 'all',
+  regSearch: '',
+  checkinRecent: [],
+  acStatus: null
+};
+
+/* ============================================================
+   API CLIENT
+   ============================================================ */
+async function api(action, { method = 'GET', query = {}, body = null, auth = true, retry = true } = {}) {
+  const params = new URLSearchParams({ action, eventId: state.eventId, ...query });
+  const url = `${API_URL}?${params.toString()}`;
+
+  const headers = { 'Content-Type': 'application/json' };
+  if (auth && state.accessToken) headers['Authorization'] = `Bearer ${state.accessToken}`;
+
+  const opts = { method, headers, credentials: 'include' };
+  if (body && method !== 'GET') opts.body = JSON.stringify(body);
+
+  let res;
+  try {
+    res = await fetch(url, opts);
+  } catch {
+    throw new ApiError('network', 'Couldn\'t reach the server. Check your connection.', 0);
+  }
+
+  if (res.status === 401 && auth && retry && state.accessToken) {
+    const refreshed = await attemptRefresh();
+    if (refreshed) return api(action, { method, query, body, auth, retry: false });
+    signOut(true);
+    throw new ApiError('session_expired', 'Your session ended. Please sign in again.', 401);
+  }
+
+  let data = null;
+  const text = await res.text();
+  if (text) {
+    try { data = JSON.parse(text); } catch { data = { raw: text }; }
+  }
+
+  if (!res.ok) {
+    const serverErr = data?.error || data?.message || '';
+    throw new ApiError(serverErr || `http_${res.status}`, humanizeServerError(serverErr, res.status), res.status, data);
+  }
+
+  return data || {};
+}
+
+class ApiError extends Error {
+  constructor(code, message, status, raw) {
+    super(message);
+    this.code = code;
+    this.status = status;
+    this.raw = raw;
+  }
+}
+
+function humanizeServerError(code, status) {
+  const c = String(code || '').toLowerCase();
+  if (status === 401 || c.includes('invalid credentials')) return 'Wrong email or password. Please try again.';
+  if (status === 403 || c.includes('insufficient') || c.includes('disabled')) return 'You don\'t have access to do that.';
+  if (status === 429 || c.includes('rate limit')) return 'Too many requests. Please wait a moment.';
+  if (status === 404 || c.includes('not found')) return 'That doesn\'t exist anymore.';
+  if (status === 409 || c.includes('already')) return 'That\'s already been done.';
+  if (status === 400) return code || 'Please check your input and try again.';
+  if (status >= 500) return 'Something went wrong on our side. Try again in a moment.';
+  return code || 'Something went wrong.';
+}
+
+async function attemptRefresh() {
+  try {
+    const res = await fetch(`${API_URL}?action=refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (data?.accessToken) {
+      state.accessToken = data.accessToken;
+      persistSession();
+      return true;
+    }
+    return false;
+  } catch { return false; }
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+const ICONS = {
+  success: '<polyline points="20 6 9 17 4 12"/>',
+  error: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+  info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+  warning: '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'
+};
+function toast(message, type = 'info', duration = 3500) {
+  const host = $('#toastHost');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[type]}</svg><span>${escapeHtml(message)}</span>`;
+  host.appendChild(el);
+  setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 300); }, duration);
+}
+
+/* ============================================================
+   FORMATTING
+   ============================================================ */
+function formatDate(ms) {
+  if (!ms) return '—';
+  try {
+    return new Date(ms).toLocaleString('en-GB', {
+      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  } catch { return '—'; }
+}
+function formatDateShort(ms) {
+  if (!ms) return '—';
+  try {
+    return new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch { return '—'; }
+}
+function formatRelative(ms) {
+  if (!ms) return 'never';
+  const diff = Date.now() - ms;
+  if (diff < 60_000) return 'just now';
+  if (diff < 3_600_000) return Math.floor(diff / 60_000) + 'm ago';
+  if (diff < 86_400_000) return Math.floor(diff / 3_600_000) + 'h ago';
+  if (diff < 604_800_000) return Math.floor(diff / 86_400_000) + 'd ago';
+  return formatDateShort(ms);
+}
+function formatDuration(ms) {
+  if (!ms || ms <= 0) return '0m';
+  const t = Math.floor(ms / 60000);
+  const h = Math.floor(t / 60);
+  const m = t % 60;
+  if (h <= 0) return `${m}m`;
+  if (m === 0) return `${h}h`;
+  return `${h}h ${m}m`;
+}
+function initials(str) {
+  const s = String(str || '').trim();
+  if (!s) return '?';
+  const parts = s.split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 1).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+function statusBadge(status) {
+  const s = String(status || '').toLowerCase();
+  if (s === 'approved') return '<span class="badge approved"><span class="dot"></span> Approved</span>';
+  if (s === 'pending') return '<span class="badge pending"><span class="dot"></span> Pending</span>';
+  if (s === 'rejected') return '<span class="badge rejected"><span class="dot"></span> Rejected</span>';
+  return `<span class="badge neutral">${escapeHtml(status || 'Unknown')}</span>`;
+}
+function emailStatusBadge(status) {
+  const s = String(status || '').toLowerCase();
+  if (s === 'sent') return '<span class="badge success"><span class="dot"></span> Sent</span>';
+  if (s === 'pending') return '<span class="badge warning"><span class="dot"></span> Pending</span>';
+  if (s === 'queued') return '<span class="badge queued"><span class="dot"></span> Queued</span>';
+  if (s === 'failed') return '<span class="badge danger"><span class="dot"></span> Failed</span>';
+  return '';
+}
+
+/* ============================================================
+   WHATSAPP + IMAGE HELPERS
+   ============================================================ */
+function extractNumberForDisplay(input) {
+  if (!input) return '';
+  const s = String(input).trim();
+  const urlMatch = /wa\.me\/(\d+)/i.exec(s);
+  if (urlMatch) return urlMatch[1];
+  return s.replace(/\D/g, '');
+}
+function normalizeWhatsappNumber(input) {
+  if (!input) return '';
+  const s = String(input).trim();
+  const urlMatch = /wa\.me\/(\d+)/i.exec(s);
+  if (urlMatch) return urlMatch[1];
+  const digits = s.replace(/\D/g, '');
+  if (digits.length < 7 || digits.length > 15) return '';
+  return digits;
+}
+function isValidImageUrl(url) {
+  const s = String(url || '').trim();
+  if (!s) return true;
+  return /^https?:\/\/.+/i.test(s) && s.length <= 500;
+}
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+/* ============================================================
+   SESSION
+   ============================================================ */
+function persistSession() {
+  if (state.accessToken && state.admin && state.eventId) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+      accessToken: state.accessToken,
+      admin: state.admin,
+      eventId: state.eventId
+    }));
+  }
+}
+function loadSession() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed.accessToken || !parsed.admin || !parsed.eventId) return null;
+    return parsed;
+  } catch { return null; }
+}
+function clearSession() {
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
+/* ============================================================
+   EVENT LOOKUP
+   ============================================================ */
+function getEventIdFromUrl() {
+  const p = new URLSearchParams(window.location.search);
+  return p.get('event') || p.get('eventId') || p.get('e') || null;
+}
+
+async function fetchPublicEvent(eventId) {
+  try {
+    const res = await fetch(`${API_URL}?action=public_event&eventId=${encodeURIComponent(eventId)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data?.success || !data.event) return null;
+    return { event: data.event, ticketTypes: data.ticketTypes || [] };
+  } catch { return null; }
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+(async function boot() {
+  const eventId = getEventIdFromUrl();
+  if (!eventId) {
+    showLoaderError('Missing event link', 'This page needs an event ID in the URL. Ask your organizer for the correct link.');
+    return;
+  }
+  state.eventId = eventId;
+
+  const eventData = await fetchPublicEvent(eventId);
+  if (!eventData) {
+    showLoaderError('Event not found', 'We couldn\'t find this event. The link may be broken or the event may have been removed.');
+    return;
+  }
+
+  state.event = eventData.event;
+  state.ticketTypes = eventData.ticketTypes;
+
+  const saved = loadSession();
+  if (saved && saved.eventId === eventId) {
+    state.accessToken = saved.accessToken;
+    state.admin = saved.admin;
+    try {
+      await api('me');
+      enterApp();
+      return;
+    } catch {
+      const refreshed = await attemptRefresh();
+      if (refreshed) {
+        try { await api('me'); enterApp(); return; } catch { /* fall through */ }
+      }
+      clearSession();
+      state.accessToken = null;
+      state.admin = null;
+    }
+  }
+
+  showLogin();
+})();
+
+function showLoaderError(title, message) {
+  const loader = $('#pageLoader');
+  loader.innerHTML = `
+    <div class="err-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <h2>${escapeHtml(title)}</h2>
+      <p>${escapeHtml(message)}</p>
+    </div>
+  `;
+}
+
+function showLogin() {
+  $('#pageLoader').classList.add('hidden');
+  $('#authGate').classList.remove('hidden');
+
+  $('#authEventName').textContent = state.event?.name || 'Event';
+  $('#authEventMeta').textContent = [
+    state.event?.date ? formatDateShort(state.event.date) : null,
+    state.event?.venue
+  ].filter(Boolean).join(' · ') || '—';
+
+  setTimeout(() => $('#inp-email').focus(), 100);
+}
+
+function enterApp() {
+  $('#pageLoader').classList.add('hidden');
+  $('#authGate').classList.add('hidden');
+  $('#app').classList.add('active');
+
+  $('#sidebarEventName').textContent = state.event?.name || 'Event';
+  $('#sidebarEventMeta').textContent = [
+    state.event?.date ? formatDateShort(state.event.date) : null,
+    state.event?.venue
+  ].filter(Boolean).join(' · ') || '—';
+  $('#mobileBarTitle').textContent = state.event?.name || 'Admin console';
+
+  $('#userName').textContent = state.admin?.label || state.admin?.email || 'Admin';
+  $('#userRole').textContent = state.admin?.role === 'payment_admin' ? 'Payment admin' : 'Check-in admin';
+  $('#userAvatar').textContent = initials(state.admin?.label || state.admin?.email);
+
+  applyRoleVisibility();
+
+  const defaultView = state.admin?.role === 'checkin_admin' ? 'checkin' : 'registrations';
+  switchView(defaultView);
+}
+
+function applyRoleVisibility() {
+  const role = state.admin?.role;
+  $$('[data-roles]').forEach(el => {
+    const allowed = el.dataset.roles.split(',').map(r => r.trim());
+    const visible = allowed.includes(role);
+    el.classList.toggle('hidden', !visible);
+    if (!visible) el.style.display = 'none';
+    else el.style.display = '';
+  });
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('#inp-email').value.trim();
+  const password = $('#inp-password').value;
+
+  let valid = true;
+  const clearErr = id => $(id).classList.remove('error');
+  clearErr('#f-email'); clearErr('#f-password');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { $('#f-email').classList.add('error'); valid = false; }
+  if (!password) { $('#f-password').classList.add('error'); valid = false; }
+  if (!valid) return;
+
+  const btn = $('#loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-spinner"></span><span>Signing in…</span>';
+
+  try {
+    const res = await fetch(`${API_URL}?action=login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ eventId: state.eventId, email, password })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || !data.success) {
+      btn.disabled = false;
+      btn.innerHTML = 'Sign in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+      if (res.status === 401) {
+        $('#f-email').classList.add('error');
+        $('#f-password').classList.add('error');
+        toast('Wrong email or password', 'error', 4000);
+      } else if (res.status === 403) {
+        toast(data.error || 'This account is disabled', 'error', 5000);
+      } else if (res.status === 429) {
+        toast('Too many attempts. Try again later.', 'warning', 5000);
+      } else {
+        toast(data.error || 'Couldn\'t sign in', 'error', 5000);
+      }
+      return;
+    }
+
+    state.accessToken = data.accessToken;
+    state.admin = data.admin;
+    persistSession();
+    toast(`Welcome, ${data.admin.label || data.admin.email}`, 'success', 2500);
+    enterApp();
+  } catch {
+    btn.disabled = false;
+    btn.innerHTML = 'Sign in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    toast('Network error — check your connection', 'error', 5000);
+  }
+});
+
+$('#inp-email').addEventListener('input', () => $('#f-email').classList.remove('error'));
+$('#inp-password').addEventListener('input', () => $('#f-password').classList.remove('error'));
+
+/* ============================================================
+   SIGN OUT
+   ============================================================ */
+$('#signOutBtnSide').addEventListener('click', () => confirmSignOut());
+$('#signOutBtnMobile').addEventListener('click', () => confirmSignOut());
+
+function confirmSignOut() {
+  openDialog({
+    icon: 'warning',
+    title: 'Sign out?',
+    sub: 'You\'ll need to enter your password to sign back in.',
+    body: '',
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Sign out', variant: 'danger', onClick: () => signOut(false) }
+    ]
+  });
+}
+
+async function signOut(silent = false) {
+  try {
+    await fetch(`${API_URL}?action=logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(state.accessToken ? { 'Authorization': `Bearer ${state.accessToken}` } : {})
+      },
+      credentials: 'include'
+    });
+  } catch { /* ignore */ }
+
+  clearSession();
+  state.accessToken = null;
+  state.admin = null;
+  state.regs = [];
+  state.acStatus = null;
+
+  if (!silent) {
+    closeDialog();
+    toast('Signed out', 'info', 2000);
+  }
+
+  $('#app').classList.remove('active');
+  $('#pageLoader').classList.add('hidden');
+  $('#authGate').classList.remove('hidden');
+  $('#inp-password').value = '';
+  $('#loginBtn').disabled = false;
+  $('#loginBtn').innerHTML = 'Sign in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+}
+
+/* ============================================================
+   VIEW SWITCH
+   ============================================================ */
+function switchView(view) {
+  state.currentView = view;
+  $$('.view').forEach(v => v.classList.toggle('active', v.id === `view-${view}`));
+  $$('.nav-item[data-view]').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+  $$('.mobile-nav-item[data-view]').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+
+  if (view === 'overview') loadOverview();
+  if (view === 'registrations') loadRegistrations();
+  if (view === 'checkin') loadCheckin();
+  if (view === 'tickets') loadTicketTypes();
+  if (view === 'autocheckin') loadAutoCheckin();
+  if (view === 'account') loadAccount();
+}
+
+$$('.nav-item[data-view], .mobile-nav-item[data-view]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.classList.contains('hidden')) return;
+    switchView(btn.dataset.view);
+  });
+});
+
+/* ============================================================
+   DIALOG
+   ============================================================ */
+function closeDialog() { $('#dialog').classList.remove('show'); }
+
+function openDialog({ icon = 'info', title, sub = '', body, actions, onClose }) {
+  const iconEl = $('#dialogIcon');
+  iconEl.className = 'dialog-icon ' + icon;
+  if (icon === 'danger' || icon === 'warning') {
+    iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+  } else if (icon === 'success') {
+    iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  } else {
+    iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+  }
+
+  $('#dialogTitle').textContent = title;
+  const subEl = $('#dialogSub');
+  if (sub) { subEl.textContent = sub; subEl.style.display = ''; }
+  else { subEl.textContent = ''; subEl.style.display = 'none'; }
+
+  const bodyEl = $('#dialogBody');
+  if (typeof body === 'string') bodyEl.innerHTML = body;
+  else if (body instanceof HTMLElement) { bodyEl.innerHTML = ''; bodyEl.appendChild(body); }
+  else bodyEl.innerHTML = '';
+
+  const actionsEl = $('#dialogActions');
+  actionsEl.innerHTML = '';
+  (actions || [{ label: 'Close', variant: 'primary', onClick: closeDialog }]).forEach(a => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn ' + (a.variant ? `btn-${a.variant}` : 'btn-secondary');
+    btn.textContent = a.label;
+    btn.addEventListener('click', () => a.onClick ? a.onClick() : closeDialog());
+    actionsEl.appendChild(btn);
+  });
+
+  $('#dialog').classList.add('show');
+  state._dialogClose = onClose || null;
+}
+
+$('#dialog').addEventListener('click', e => {
+  if (e.target.id === 'dialog') {
+    const cb = state._dialogClose;
+    closeDialog();
+    if (cb) cb();
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('#dialog').classList.contains('show')) {
+    const cb = state._dialogClose;
+    closeDialog();
+    if (cb) cb();
+  }
+});
+
+/* ============================================================
+   OVERVIEW — includes stats + event details card at the bottom
+   ============================================================ */
+$('#refreshOverviewBtn').addEventListener('click', () => loadOverview(true));
+
+async function loadOverview() {
+  const wrap = $('#overviewContent');
+  wrap.innerHTML = `
+    <div class="stats-grid">
+      ${[...Array(4)].map(() => '<div class="skeleton skel-tile"></div>').join('')}
+    </div>
+    <div class="card"><div class="skeleton" style="height: 120px; margin: var(--s-5);"></div></div>
+    <div class="card"><div class="skeleton" style="height: 220px; margin: var(--s-5);"></div></div>
+  `;
+
+  // Fetch stats and get_event in parallel so the event details card
+  // shows the authoritative copy from the API (not just what public_event returned).
+  try {
+    const [statsRes, eventRes] = await Promise.all([
+      api('checkin_stats'),
+      api('get_event')
+    ]);
+
+    if (eventRes.event) state.event = { ...state.event, ...eventRes.event };
+    if (eventRes.ticketTypes) state.ticketTypes = eventRes.ticketTypes;
+    state.editableFields = eventRes.editableFields || [];
+
+    renderOverview(statsRes.stats);
+  } catch (err) {
+    wrap.innerHTML = `
+      <div class="card"><div class="empty">
+        <div class="empty-icon" style="background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Couldn't load overview</h3>
+        <p>${escapeHtml(err.message)}</p>
+        <button class="btn btn-primary" id="retryOverview">Try again</button>
+      </div></div>
+    `;
+    $('#retryOverview').addEventListener('click', () => loadOverview());
+  }
+}
+
+function renderOverview(stats) {
+  const wrap = $('#overviewContent');
+  const s = stats || {};
+  const isPayment = state.admin?.role === 'payment_admin';
+  const isCheckin = state.admin?.role === 'checkin_admin';
+
+  const totalApproved = s.approved || 0;
+  const checkedIn = s.checkedIn || 0;
+  const checkinPct = totalApproved > 0 ? Math.round((checkedIn / totalApproved) * 100) : 0;
+  const emailQueued = s.emailQueued ?? 0;
+  const hasQueued = emailQueued > 0;
+
+  const ev = state.event || {};
+  const canEdit = isPayment;
+  const waNumber = extractNumberForDisplay(ev.whatsapp || '');
+  const waUrl = waNumber ? `https://wa.me/${waNumber}` : '';
+
+  const coverHtml = ev.image
+    ? `<div class="event-cover-mini">
+         <img src="${escapeHtml(ev.image)}" alt="" onerror="this.parentElement.innerHTML='<div class=\\'event-name\\' style=\\'position:absolute;bottom:20px;left:20px;right:20px;\\'>${escapeHtml(ev.name || 'Event')}</div>'">
+         <div class="event-name">${escapeHtml(ev.name || 'Event')}</div>
+       </div>`
+    : `<div class="event-cover-mini">
+         <div class="event-name">${escapeHtml(ev.name || 'Event')}</div>
+       </div>`;
+
+  wrap.innerHTML = `
+    <div class="notice ${ev.date && ev.date < Date.now() ? 'info' : 'success'}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <div class="notice-body">
+        <div class="notice-title">${escapeHtml(ev.name || 'Event')}</div>
+        <div class="notice-text">${escapeHtml(formatDate(ev.date))} · ${escapeHtml(ev.venue || '')}</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-label">Total</div>
+        <div class="stat-value">${s.total ?? 0}</div>
+        <div class="stat-sub">All registrations</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value" style="color: ${s.pending > 0 ? 'var(--warning)' : 'var(--text)'};">${s.pending ?? 0}</div>
+        <div class="stat-sub">Awaiting review</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Approved</div>
+        <div class="stat-value" style="color: var(--success);">${s.approved ?? 0}</div>
+        <div class="stat-sub">Confirmed attendees</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Checked in</div>
+        <div class="stat-value">${checkedIn}</div>
+        <div class="stat-sub">${checkinPct}% of approved</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Check-in progress</h2>
+          <div class="card-sub">${checkedIn} of ${totalApproved} approved attendees checked in</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="progress-track" style="height: 10px;">
+          <div class="progress-fill ${checkinPct === 100 ? 'success' : ''}" style="width: ${checkinPct}%;"></div>
+        </div>
+        <div class="flex-between" style="margin-top: 8px;">
+          <span class="text-sm">${checkinPct}% complete</span>
+          <span class="text-sm">${totalApproved - checkedIn} remaining</span>
+        </div>
+      </div>
+    </div>
+
+    ${(isPayment || isCheckin) ? `
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Breakdown</h2>
+            <div class="card-sub">How the numbers are composed</div>
+          </div>
+        </div>
+        <div class="card-body tight">
+          ${renderOverviewRow('Rejected', s.rejected ?? 0)}
+          ${isPayment ? renderOverviewRow('Self-registered', s.sourceSelf ?? 0) : ''}
+          ${isPayment ? renderOverviewRow('Added manually', s.sourceManual ?? 0) : ''}
+          ${isCheckin ? renderOverviewRow('Checked in manually', s.checkedInManually ?? 0) : ''}
+          ${isCheckin ? renderOverviewRow('Auto-checked in', s.checkedInAuto ?? 0) : ''}
+        </div>
+      </div>
+    ` : ''}
+
+    ${isPayment ? `
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Email delivery</h2>
+            <div class="card-sub">Ticket and rejection emails</div>
+          </div>
+        </div>
+        <div class="card-body tight">
+          ${renderOverviewRow('Sent', s.emailSent ?? 0, 'var(--success)')}
+          ${hasQueued ? renderOverviewRow('Queued', emailQueued, 'var(--text-2)') : ''}
+          ${renderOverviewRow('Not yet sent', s.emailPending ?? 0, s.emailPending > 0 ? 'var(--warning)' : null)}
+          ${renderOverviewRow('Failed', s.emailFailed ?? 0, s.emailFailed > 0 ? 'var(--danger)' : null)}
+        </div>
+      </div>
+    ` : ''}
+
+    <!-- ============================================================
+         EVENT DETAILS — moved here from its own nav item
+         ============================================================ -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Event details</h2>
+          <div class="card-sub">What attendees see on the registration page</div>
+        </div>
+        ${canEdit ? `
+          <button class="btn btn-secondary btn-sm" id="editEventBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit event
+          </button>
+        ` : ''}
+      </div>
+      <div class="card-body">
+        ${coverHtml}
+      </div>
+      <div class="card-body tight">
+        <div class="detail-row">
+          <span class="k">Name</span>
+          <span class="v">${escapeHtml(ev.name || '—')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">Date & time</span>
+          <span class="v">${escapeHtml(formatDate(ev.date))}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">Venue</span>
+          <span class="v">${escapeHtml(ev.venue || '—')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">Description</span>
+          <span class="v muted" style="max-width: 60%; text-align:right;">${escapeHtml(ev.description || 'No description yet')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">Phone</span>
+          <span class="v">${escapeHtml(ev.phone || 'Not set')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">WhatsApp</span>
+          <span class="v">${waUrl
+            ? `<a href="${escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer">wa.me/${escapeHtml(waNumber)}</a>`
+            : 'Not set'}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Payment details</h2>
+          <div class="card-sub">Read-only — contact the organizer to change these</div>
+        </div>
+        <span class="badge neutral">Organizer-managed</span>
+      </div>
+      <div class="card-body tight">
+        <div class="detail-row">
+          <span class="k">Bank</span>
+          <span class="v">${escapeHtml(ev.bankName || '—')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">Account number</span>
+          <span class="v mono">${escapeHtml(ev.accountNumber || '—')}</span>
+        </div>
+        <div class="detail-row">
+          <span class="k">Account name</span>
+          <span class="v">${escapeHtml(ev.accountName || '—')}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-gap" style="margin-bottom: var(--s-2);">
+      <a class="btn btn-secondary" href="${API_URL}?action=export_csv&eventId=${encodeURIComponent(state.eventId)}" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </a>
+    </div>
+  `;
+
+  $('#editEventBtn')?.addEventListener('click', openEditEventDialog);
+}
+
+function renderOverviewRow(label, value, color) {
+  return `
+    <div class="row" style="cursor: default; padding: var(--s-3) var(--s-5);">
+      <div class="row-info">
+        <div class="row-title" style="font-weight: 500; color: var(--text-2);">${escapeHtml(label)}</div>
+      </div>
+      <div style="font-weight: 700; font-size: 15px; ${color ? `color: ${color};` : ''}">${value}</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   EVENT EDIT DIALOG
+   ============================================================ */
+function canEditField(field) {
+  if (state.admin?.role !== 'payment_admin') return false;
+  return PAYMENT_ADMIN_EDITABLE.includes(field);
+}
+
+function openEditEventDialog() {
+  const ev = state.event || {};
+  const form = document.createElement('form');
+
+  const fieldHTML = [];
+
+  if (canEditField('description')) {
+    fieldHTML.push(`
+      <div class="field">
+        <label class="label" for="ed-desc">
+          <span>Description</span>
+          <span class="hint">Optional</span>
+        </label>
+        <textarea class="textarea" id="ed-desc" placeholder="A short line about the event that attendees will see.">${escapeHtml(ev.description || '')}</textarea>
+      </div>
+    `);
+  }
+
+  if (canEditField('image')) {
+    fieldHTML.push(`
+      <div class="field" id="f-ed-image">
+        <label class="label" for="ed-image">
+          <span>Cover image URL</span>
+          <span class="hint">Optional</span>
+        </label>
+        <input class="input" id="ed-image" type="url" inputmode="url" placeholder="https://example.com/cover.jpg" value="${escapeHtml(ev.image || '')}">
+        <div class="help">Shown as the hero on the registration page. Must start with https://</div>
+        <div class="error-msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Enter a valid https:// image URL</span>
+        </div>
+        <div class="image-preview ${ev.image ? '' : 'empty'}" id="preview-ed-image">
+          ${ev.image
+            ? `<img src="${escapeHtml(ev.image)}" alt="Cover preview" onerror="showImagePreviewEmpty('ed-image')">
+               <button type="button" class="remove-img" data-remove-image="ed-image" aria-label="Remove image">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+               </button>`
+            : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+               <span>No image — paste a URL above</span>`}
+        </div>
+      </div>
+    `);
+  }
+
+  if (canEditField('phone')) {
+    fieldHTML.push(`
+      <div class="field">
+        <label class="label" for="ed-phone">
+          <span>Contact phone</span>
+          <span class="hint">Optional</span>
+        </label>
+        <input class="input" id="ed-phone" type="tel" inputmode="tel" placeholder="+234 800 000 0000" value="${escapeHtml(ev.phone || '')}">
+      </div>
+    `);
+  }
+
+  if (canEditField('whatsapp')) {
+    const waDisplay = extractNumberForDisplay(ev.whatsapp || '');
+    fieldHTML.push(`
+      <div class="field" id="f-ed-wa">
+        <label class="label" for="ed-wa">
+          <span>WhatsApp number</span>
+          <span class="hint">Optional</span>
+        </label>
+        <div class="phone-input-wrap">
+          <span class="prefix">wa.me/</span>
+          <input class="input input-mono" id="ed-wa" type="tel" inputmode="tel" placeholder="2348000000000" value="${escapeHtml(waDisplay)}">
+        </div>
+        <div class="help">Include the country code. Spaces, + and dashes are fine.</div>
+        <div class="error-msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Enter a valid phone number with country code (7–15 digits)</span>
+        </div>
+        <div class="wa-preview" id="preview-ed-wa"></div>
+      </div>
+    `);
+  }
+
+  form.innerHTML = `
+    <p style="font-size: 13.5px; line-height: 1.55; margin: 0 0 var(--s-5); color: var(--text-2);">
+      You can update these details. Name, date, venue and payment details are locked for you — ask the organizer to change those.
+    </p>
+    ${fieldHTML.join('')}
+  `;
+
+  openDialog({
+    icon: 'info',
+    title: 'Edit event',
+    sub: state.event?.name || 'Event',
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Save changes', variant: 'primary', onClick: () => submitEditEvent(form) }
+    ]
+  });
+
+  if (canEditField('image')) wireImageField(form, 'ed-image');
+  if (canEditField('whatsapp')) wireWhatsappField(form, 'ed-wa');
+}
+
+function showImagePreviewEmpty(id) {
+  const preview = document.getElementById(`preview-${id}`);
+  if (!preview) return;
+  preview.classList.add('empty');
+  preview.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <span>Couldn't load that image</span>
+  `;
+}
+
+function wireImageField(formEl, id) {
+  const input = formEl.querySelector(`#${id}`);
+  const preview = formEl.querySelector(`#preview-${id}`);
+  if (!input || !preview) return;
+
+  const refresh = () => {
+    const url = input.value.trim();
+    formEl.querySelector(`#f-${id}`).classList.remove('error');
+    if (!url) {
+      preview.classList.add('empty');
+      preview.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>No image — paste a URL above</span>
+      `;
+      return;
+    }
+    if (!isValidImageUrl(url)) {
+      formEl.querySelector(`#f-${id}`).classList.add('error');
+      return;
+    }
+    preview.classList.remove('empty');
+    preview.innerHTML = `
+      <img src="${escapeHtml(url)}" alt="Cover preview" onerror="showImagePreviewEmpty('${id}')">
+      <button type="button" class="remove-img" data-remove-image="${id}" aria-label="Remove image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    `;
+    wireRemoveButton(formEl, id);
+  };
+
+  input.addEventListener('input', debounce(refresh, 400));
+  input.addEventListener('change', refresh);
+  wireRemoveButton(formEl, id);
+}
+
+function wireRemoveButton(formEl, id) {
+  const btn = formEl.querySelector(`[data-remove-image="${id}"]`);
+  if (!btn) return;
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const input = formEl.querySelector(`#${id}`);
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+  });
+}
+
+function wireWhatsappField(formEl, id) {
+  const input = formEl.querySelector(`#${id}`);
+  const preview = formEl.querySelector(`#preview-${id}`);
+  if (!input || !preview) return;
+
+  const refresh = () => {
+    const raw = input.value.trim();
+    formEl.querySelector(`#f-${id}`).classList.remove('error');
+    const digits = normalizeWhatsappNumber(raw);
+
+    if (!raw) { preview.innerHTML = ''; return; }
+    if (!digits) {
+      formEl.querySelector(`#f-${id}`).classList.add('error');
+      preview.innerHTML = '';
+      return;
+    }
+    preview.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Will link to <strong>wa.me/${escapeHtml(digits)}</strong>
+    `;
+  };
+
+  input.addEventListener('input', refresh);
+  refresh();
+}
+
+async function submitEditEvent(form) {
+  const get = id => form.querySelector(`#${id}`)?.value.trim() ?? '';
+
+  const patch = {};
+  let valid = true;
+  const clearErr = id => form.querySelector(`#f-${id}`)?.classList.remove('error');
+  const setErr = id => form.querySelector(`#f-${id}`)?.classList.add('error');
+
+  if (canEditField('description')) patch.description = get('ed-desc');
+  if (canEditField('image')) {
+    clearErr('ed-image');
+    const url = get('ed-image');
+    if (!isValidImageUrl(url)) { setErr('ed-image'); valid = false; }
+    else patch.image = url;
+  }
+  if (canEditField('phone')) patch.phone = get('ed-phone');
+  if (canEditField('whatsapp')) {
+    clearErr('ed-wa');
+    const raw = get('ed-wa');
+    if (raw) {
+      const digits = normalizeWhatsappNumber(raw);
+      if (!digits) { setErr('ed-wa'); valid = false; }
+      else patch.whatsapp = `https://wa.me/${digits}`;
+    } else {
+      patch.whatsapp = '';
+    }
+  }
+
+  if (!valid) { toast('Please fix the highlighted fields', 'error'); return; }
+  if (!Object.keys(patch).length) { toast('Nothing to save', 'info'); return; }
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent.includes('Save'));
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Saving…</span>'; }
+
+  try {
+    const res = await api('update_event', {
+      method: 'POST',
+      body: { eventId: state.eventId, ...patch }
+    });
+
+    const updated = res.updatedFields || Object.keys(patch);
+    const friendly = updated.map(f => ({
+      description: 'description',
+      image: 'cover image',
+      phone: 'phone',
+      whatsapp: 'WhatsApp number'
+    }[f] || f)).join(', ');
+
+    // Also update local state so the overview reflects the change without a full reload
+    if (res.event) state.event = { ...state.event, ...res.event };
+
+    closeDialog();
+    toast(`Saved: ${friendly}`, 'success', 3500);
+    loadOverview();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Save changes'; }
+    toast(err.message || 'Couldn\'t save changes', 'error', 5000);
+  }
+}
+
+/* ============================================================
+   REGISTRATIONS
+   ============================================================ */
+$('#regSearch').addEventListener('input', debounce(e => {
+  state.regSearch = e.target.value.trim();
+  renderRegistrations();
+}, 250));
+
+$$('#regFilter button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.regFilter = btn.dataset.filter;
+    $$('#regFilter button').forEach(b => b.classList.toggle('active', b === btn));
+    renderRegistrations();
+  });
+});
+
+async function loadRegistrations() {
+  const wrap = $('#regList');
+  wrap.innerHTML = [...Array(5)].map(() => '<div class="skeleton skel-row" style="margin: 8px 20px;"></div>').join('');
+
+  const regsActions = $('#regsActions');
+  const isPayment = state.admin?.role === 'payment_admin';
+
+  regsActions.innerHTML = `
+    <a class="btn btn-secondary btn-sm" href="${API_URL}?action=export_csv&eventId=${encodeURIComponent(state.eventId)}" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export
+    </a>
+    ${isPayment ? `
+      <button class="btn btn-primary btn-sm" id="manualRegBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add attendee
+      </button>
+    ` : ''}
+    <button class="btn btn-secondary btn-sm" id="refreshRegs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+      Refresh
+    </button>
+  `;
+
+  $('#refreshRegs')?.addEventListener('click', () => loadRegistrations());
+  $('#manualRegBtn')?.addEventListener('click', openManualRegistrationDialog);
+
+  try {
+    const data = await api('list_registrations', { query: { limit: 200 } });
+    state.regs = data.registrations || [];
+    renderRegistrations();
+    updateNavBadges();
+  } catch (err) {
+    wrap.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon" style="background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Couldn't load registrations</h3>
+        <p>${escapeHtml(err.message)}</p>
+        <button class="btn btn-primary" id="retryRegs">Try again</button>
+      </div>
+    `;
+    $('#retryRegs').addEventListener('click', () => loadRegistrations());
+  }
+}
+
+function renderRegistrations() {
+  const wrap = $('#regList');
+  let list = state.regs || [];
+
+  if (state.regFilter !== 'all') list = list.filter(r => r.status === state.regFilter);
+
+  if (state.regSearch) {
+    const q = state.regSearch.toLowerCase();
+    list = list.filter(r =>
+      (r.name || '').toLowerCase().includes(q) ||
+      (r.email || '').toLowerCase().includes(q) ||
+      (r.phone || '').replace(/\D/g, '').includes(q.replace(/\D/g, '')) ||
+      (r.uid || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (!list.length) {
+    const isFiltered = state.regFilter !== 'all' || state.regSearch;
+    wrap.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h3>${isFiltered ? 'No matches' : 'No registrations yet'}</h3>
+        <p>${isFiltered ? 'Try changing your search or filter.' : 'Registrations will appear here as attendees sign up.'}</p>
+      </div>
+    `;
+    return;
+  }
+
+  const isPayment = state.admin?.role === 'payment_admin';
+
+  wrap.innerHTML = '';
+  list.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'row clickable';
+    const tt = state.ticketTypes.find(t => t.id === r.ticketTypeId);
+    const ttName = tt?.name || '—';
+    const leadClass = r.status === 'approved' ? 'ok'
+                     : r.status === 'pending' ? 'warn'
+                     : r.status === 'rejected' ? 'bad' : '';
+
+    row.innerHTML = `
+      <div class="row-lead ${leadClass}">${escapeHtml(initials(r.name))}</div>
+      <div class="row-info">
+        <div class="row-title">
+          ${escapeHtml(r.name || 'Unnamed')}
+          ${statusBadge(r.status)}
+          ${r.checkedInAt ? '<span class="badge success"><span class="dot"></span> Checked in</span>' : ''}
+        </div>
+        <div class="row-meta">
+          <span class="mono">${escapeHtml(r.uid || '')}</span>
+          <span class="sep">·</span>
+          <span>${escapeHtml(r.email || '')}</span>
+          <span class="sep">·</span>
+          <span>${escapeHtml(ttName)}</span>
+        </div>
+      </div>
+      <div class="row-actions">
+        ${isPayment && r.status === 'pending' ? `
+          <button class="btn btn-success btn-sm" data-action="approve" title="Approve">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <button class="btn btn-danger-outline btn-sm" data-action="reject" title="Reject">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    row.addEventListener('click', e => {
+      const approve = e.target.closest('[data-action="approve"]');
+      const reject = e.target.closest('[data-action="reject"]');
+      if (approve) { e.stopPropagation(); openApproveDialog(r); }
+      else if (reject) { e.stopPropagation(); openRejectDialog(r); }
+      else openRegistrationDetail(r);
+    });
+
+    wrap.appendChild(row);
+  });
+}
+
+function openRegistrationDetail(r) {
+  const isPayment = state.admin?.role === 'payment_admin';
+  const tt = state.ticketTypes.find(t => t.id === r.ticketTypeId);
+  const ttName = tt?.name || '—';
+
+  const body = document.createElement('div');
+  body.innerHTML = `
+    <div style="text-align: center; margin-bottom: var(--s-5);">
+      <div style="width: 64px; height: 64px; margin: 0 auto var(--s-3); border-radius: 50%; background: var(--bg-sunken); border: 1px solid var(--border); display: grid; place-items: center; font-size: 22px; font-weight: 700; text-transform: uppercase;">
+        ${escapeHtml(initials(r.name))}
+      </div>
+      <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 6px;">${escapeHtml(r.name || 'Unnamed')}</div>
+      <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;">
+        ${statusBadge(r.status)}
+        ${r.emailStatus ? emailStatusBadge(r.emailStatus) : ''}
+      </div>
+    </div>
+
+    <div class="card-body" style="padding: 0;">
+      <div style="display: grid; gap: 12px;">
+        <div class="flex-between" style="font-size: 13.5px;">
+          <span class="text-sm">Ticket ID</span>
+          <span style="font-weight: 600; font-family: var(--f-mono);">${escapeHtml(r.uid || '—')}</span>
+        </div>
+        <div class="flex-between" style="font-size: 13.5px;">
+          <span class="text-sm">Email</span>
+          <span style="font-weight: 600; word-break: break-all; text-align: right;">${escapeHtml(r.email || '—')}</span>
+        </div>
+        <div class="flex-between" style="font-size: 13.5px;">
+          <span class="text-sm">Phone</span>
+          <span style="font-weight: 600;">${escapeHtml(r.phone || '—')}</span>
+        </div>
+        <div class="flex-between" style="font-size: 13.5px;">
+          <span class="text-sm">Ticket type</span>
+          <span style="font-weight: 600;">${escapeHtml(ttName)}</span>
+        </div>
+        <div class="flex-between" style="font-size: 13.5px;">
+          <span class="text-sm">Registered</span>
+          <span style="font-weight: 600;">${escapeHtml(formatRelative(r.createdAt))}</span>
+        </div>
+        ${r.reviewedAt ? `
+          <div class="flex-between" style="font-size: 13.5px;">
+            <span class="text-sm">Reviewed</span>
+            <span style="font-weight: 600;">${escapeHtml(formatRelative(r.reviewedAt))}${r.reviewedByLabel ? ` by ${escapeHtml(r.reviewedByLabel)}` : ''}</span>
+          </div>
+        ` : ''}
+        ${r.checkedInAt ? `
+          <div class="flex-between" style="font-size: 13.5px;">
+            <span class="text-sm">Checked in</span>
+            <span style="font-weight: 600; color: var(--success);">${escapeHtml(formatRelative(r.checkedInAt))}${r.autoCheckedIn ? ' (auto)' : ''}</span>
+          </div>
+        ` : ''}
+        ${r.rejectionReason ? `
+          <div class="notice danger" style="margin: 0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="notice-body">
+              <div class="notice-title">Rejection reason</div>
+              <div class="notice-text">${escapeHtml(r.rejectionReason)}</div>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+
+    ${r.receiptUrl ? `
+      <div class="field" style="margin-top: var(--s-5);">
+        <label class="label"><span>Receipt</span></label>
+        <a href="${escapeHtml(r.receiptUrl)}" target="_blank" rel="noopener noreferrer" style="display: block; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border);">
+          <img src="${escapeHtml(r.receiptUrl)}" alt="Receipt" style="width: 100%; max-height: 320px; object-fit: cover;">
+        </a>
+        <div class="help">Tap to open in a new tab.</div>
+      </div>
+    ` : ''}
+  `;
+
+  const actions = [{ label: 'Close', variant: 'secondary', onClick: closeDialog }];
+
+  if (isPayment && r.status === 'pending') {
+    actions.push({ label: 'Reject', variant: 'danger', onClick: () => { closeDialog(); openRejectDialog(r); } });
+    actions.push({ label: 'Approve', variant: 'success', onClick: () => { closeDialog(); openApproveDialog(r); } });
+  }
+
+  openDialog({
+    icon: 'info',
+    title: 'Registration',
+    sub: r.uid || '',
+    body,
+    actions
+  });
+}
+
+function openApproveDialog(r) {
+  const tt = state.ticketTypes.find(t => t.id === r.ticketTypeId);
+  openDialog({
+    icon: 'success',
+    title: 'Approve this registration?',
+    sub: r.name,
+    body: `
+      <p style="font-size: 13.5px; line-height: 1.55; margin: 0;">
+        <strong>${escapeHtml(r.name)}</strong> will receive their ticket by email.
+        ${tt ? `Ticket type: <strong>${escapeHtml(tt.name)}</strong>.` : ''}
+      </p>
+    `,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Approve', variant: 'success', onClick: () => doApprove(r) }
+    ]
+  });
+}
+
+async function doApprove(r) {
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Approve');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Approving…</span>'; }
+
+  try {
+    const res = await api('approve_registration', {
+      method: 'POST',
+      body: { eventId: state.eventId, registrationId: r.id }
+    });
+    closeDialog();
+
+    const successType = res.delivered ? 'success' : res.queued ? 'info' : 'success';
+    toast(res.message || 'Registration approved', successType, 4000);
+
+    if (res.mailError) {
+      setTimeout(() => toast('Email couldn\'t be sent right away — it will retry automatically.', 'warning', 5000), 800);
+    }
+
+    loadRegistrations();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Approve'; }
+    toast(err.message || 'Couldn\'t approve', 'error', 5000);
+  }
+}
+
+function openRejectDialog(r) {
+  const form = document.createElement('form');
+  form.innerHTML = `
+    <p style="font-size: 13.5px; line-height: 1.55; margin: 0 0 var(--s-4);">
+      Explain why <strong>${escapeHtml(r.name)}</strong>'s registration is being rejected. They'll see this reason in their email.
+    </p>
+    <div class="field" data-field="reason">
+      <label class="label" for="rj-reason">Reason <span class="req">*</span></label>
+      <textarea class="textarea" id="rj-reason" placeholder="e.g. The receipt image was too blurry to read the amount." maxlength="500" required></textarea>
+      <div class="help">Minimum 3 characters. Max 500.</div>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Please enter a reason</span></div>
+    </div>
+  `;
+
+  openDialog({
+    icon: 'danger',
+    title: 'Reject this registration?',
+    sub: r.name,
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Reject', variant: 'danger', onClick: () => doReject(r, form) }
+    ]
+  });
+
+  setTimeout(() => form.querySelector('#rj-reason')?.focus(), 150);
+}
+
+async function doReject(r, form) {
+  const reason = form.querySelector('#rj-reason').value.trim();
+  if (!reason || reason.length < 3) {
+    form.querySelector('[data-field="reason"]').classList.add('error');
+    return;
+  }
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Reject');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Rejecting…</span>'; }
+
+  try {
+    const res = await api('reject_registration', {
+      method: 'POST',
+      body: { eventId: state.eventId, registrationId: r.id, reason }
+    });
+    closeDialog();
+
+    const successType = res.delivered ? 'success' : res.queued ? 'info' : 'info';
+    toast(res.message || 'Registration rejected', successType, 4000);
+
+    if (res.mailError) {
+      setTimeout(() => toast('Email couldn\'t be sent right away — it will retry automatically.', 'warning', 5000), 800);
+    }
+
+    loadRegistrations();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Reject'; }
+    toast(err.message || 'Couldn\'t reject', 'error', 5000);
+  }
+}
+
+function openManualRegistrationDialog() {
+  const form = document.createElement('form');
+  const ttOptions = state.ticketTypes
+    .filter(t => t.active !== false)
+    .map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)} — ₦${Number(t.price || 0).toLocaleString()}</option>`)
+    .join('');
+
+  form.innerHTML = `
+    <p style="font-size: 13.5px; line-height: 1.55; margin: 0 0 var(--s-5);">
+      Add an attendee directly. They'll be approved immediately and their ticket will be emailed or queued.
+    </p>
+
+    <div class="field" data-field="name">
+      <label class="label" for="mr-name">Full name <span class="req">*</span></label>
+      <input class="input" id="mr-name" type="text" placeholder="Ada Obi" required>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter a name</span></div>
+    </div>
+
+    <div class="field" data-field="clubAffiliation">
+      <label class="label" for="mr-club-affiliation">Club affiliation <span class="req">*</span></label>
+      <input class="input" id="mr-club-affiliation" type="text" placeholder="Rotaract Club of ..." required>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter a club affiliation</span></div>
+    </div>
+
+    <div class="form-row two">
+      <div class="field" data-field="email">
+        <label class="label" for="mr-email">Email <span class="req">*</span></label>
+        <input class="input" id="mr-email" type="email" inputmode="email" placeholder="ada@example.com" required>
+        <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Valid email required</span></div>
+      </div>
+      <div class="field" data-field="phone">
+        <label class="label" for="mr-phone">Phone <span class="req">*</span></label>
+        <input class="input" id="mr-phone" type="tel" inputmode="tel" placeholder="+234 800 000 0000" required>
+        <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Valid phone required</span></div>
+      </div>
+    </div>
+
+    <div class="field" data-field="ticketTypeId">
+      <label class="label" for="mr-ticket">Ticket type <span class="req">*</span></label>
+      <select class="select" id="mr-ticket" required>
+        <option value="">Choose a ticket type</option>
+        ${ttOptions}
+      </select>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Choose a ticket type</span></div>
+    </div>
+  `;
+
+  openDialog({
+    icon: 'info',
+    title: 'Add attendee',
+    sub: 'They\'ll be approved instantly.',
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Add attendee', variant: 'primary', onClick: () => doManualRegistration(form) }
+    ]
+  });
+}
+
+async function doManualRegistration(form) {
+  const get = id => form.querySelector(`#${id}`)?.value.trim() ?? '';
+  const clearErr = k => form.querySelector(`[data-field="${k}"]`)?.classList.remove('error');
+  const setErr = k => form.querySelector(`[data-field="${k}"]`)?.classList.add('error');
+
+  const name = get('mr-name');
+  const clubAffiliation = get('mr-club-affiliation');
+  const email = get('mr-email');
+  const phone = get('mr-phone');
+  const ticketTypeId = get('mr-ticket');
+
+  ['name','clubAffiliation','email','phone','ticketTypeId'].forEach(clearErr);
+
+  let valid = true;
+  if (!name || name.length < 2) { setErr('name'); valid = false; }
+  if (!clubAffiliation) { setErr('clubAffiliation'); valid = false; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErr('email'); valid = false; }
+  if (!phone || phone.replace(/\D/g, '').length < 7) { setErr('phone'); valid = false; }
+  if (!ticketTypeId) { setErr('ticketTypeId'); valid = false; }
+  if (!valid) { toast('Please fix the highlighted fields', 'error'); return; }
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Add attendee');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Adding…</span>'; }
+
+  try {
+    const res = await api('manual_registration', {
+      method: 'POST',
+      body: { eventId: state.eventId, email, name, phone, clubAffiliation, ticketTypeId }
+    });
+    closeDialog();
+
+    const successType = res.delivered ? 'success' : 'info';
+    toast(res.message || 'Attendee added', successType, 4000);
+
+    loadRegistrations();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Add attendee'; }
+    toast(err.message || 'Couldn\'t add attendee', 'error', 5000);
+  }
+}
+
+function updateNavBadges() {
+  const regs = state.regs || [];
+  const pending = regs.filter(r => r.status === 'pending').length;
+  const approved = regs.filter(r => r.status === 'approved').length;
+  const checkedIn = regs.filter(r => r.checkedInAt).length;
+  const remaining = approved - checkedIn;
+
+  $('#navBadgeRegs').textContent = pending > 0 ? String(pending) : (regs.length > 0 ? String(regs.length) : '—');
+  $('#navBadgeCheckin').textContent = remaining > 0 ? String(remaining) : '—';
+}
+
+/* ============================================================
+   CHECK-IN
+   ============================================================ */
+$('#refreshCheckinBtn').addEventListener('click', () => loadCheckin(true));
+$('#refreshRecentBtn').addEventListener('click', () => loadRecentCheckins());
+$('#checkinSearchBtn').addEventListener('click', () => performCheckinSearch());
+$('#checkinSearch').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); performCheckinSearch(); }
+});
+
+let scanStream = null;
+let scanRaf = null;
+
+(function setupScanner() {
+  if ('BarcodeDetector' in window) {
+    $('#scanBtn').hidden = false;
+    $('#scanBtn').addEventListener('click', startScan);
+  }
+})();
+
+async function startScan() {
+  try {
+    const detector = new BarcodeDetector({ formats: ['qr_code'] });
+    scanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    const video = $('#scanVideo');
+    video.srcObject = scanStream;
+    await video.play();
+    $('#checkinScan').classList.add('show');
+
+    const tick = async () => {
+      if (!scanStream) return;
+      try {
+        const results = await detector.detect(video);
+        if (results.length) {
+          const value = results[0].rawValue;
+          stopScan();
+          $('#checkinSearch').value = value;
+          performCheckinSearch();
+          return;
+        }
+      } catch { /* keep scanning */ }
+      scanRaf = requestAnimationFrame(tick);
+    };
+    tick();
+  } catch {
+    toast('Couldn\'t access the camera', 'warning', 4000);
+    stopScan();
+  }
+}
+
+function stopScan() {
+  if (scanRaf) cancelAnimationFrame(scanRaf);
+  if (scanStream) {
+    scanStream.getTracks().forEach(t => t.stop());
+    scanStream = null;
+  }
+  $('#checkinScan').classList.remove('show');
+}
+
+async function loadCheckin() {
+  const wrap = $('#checkinStats');
+  wrap.innerHTML = [...Array(4)].map(() => '<div class="skeleton skel-tile"></div>').join('');
+
+  try {
+    const data = await api('checkin_stats');
+    const s = data.stats || {};
+    const approved = s.approved || 0;
+    const checkedIn = s.checkedIn || 0;
+    const pct = approved > 0 ? Math.round((checkedIn / approved) * 100) : 0;
+
+    wrap.innerHTML = `
+      <div class="stat">
+        <div class="stat-label">Approved</div>
+        <div class="stat-value">${approved}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Checked in</div>
+        <div class="stat-value" style="color: var(--success);">${checkedIn}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Remaining</div>
+        <div class="stat-value">${approved - checkedIn}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Progress</div>
+        <div class="stat-value">${pct}%</div>
+      </div>
+    `;
+  } catch (err) {
+    wrap.innerHTML = `<div class="notice danger" style="grid-column: 1 / -1; margin: 0;">Couldn't load stats. ${escapeHtml(err.message)}</div>`;
+  }
+
+  loadRecentCheckins();
+}
+
+async function loadRecentCheckins() {
+  const wrap = $('#recentList');
+  wrap.innerHTML = [...Array(3)].map(() => '<div class="skeleton skel-row" style="margin: 8px 20px;"></div>').join('');
+
+  try {
+    const data = await api('list_registrations', { query: { status: 'approved', limit: 200 } });
+    const regs = (data.registrations || []).filter(r => r.checkedInAt);
+    regs.sort((a, b) => (b.checkedInAt || 0) - (a.checkedInAt || 0));
+    state.checkinRecent = regs.slice(0, 20);
+    renderRecentCheckins();
+  } catch (err) {
+    wrap.innerHTML = `<div class="empty" style="padding: var(--s-6);"><p>${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+function renderRecentCheckins() {
+  const wrap = $('#recentList');
+  const list = state.checkinRecent || [];
+
+  if (!list.length) {
+    wrap.innerHTML = `
+      <div class="empty" style="padding: var(--s-8) var(--s-5);">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h3>No one checked in yet</h3>
+        <p>Check-ins will appear here as attendees arrive.</p>
+      </div>
+    `;
+    return;
+  }
+
+  wrap.innerHTML = '';
+  list.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'row clickable';
+    const tt = state.ticketTypes.find(t => t.id === r.ticketTypeId);
+
+    row.innerHTML = `
+      <div class="row-lead ok">${escapeHtml(initials(r.name))}</div>
+      <div class="row-info">
+        <div class="row-title">${escapeHtml(r.name)}</div>
+        <div class="row-meta">
+          <span class="mono">${escapeHtml(r.uid)}</span>
+          <span class="sep">·</span>
+          <span>${escapeHtml(tt?.name || '')}</span>
+          <span class="sep">·</span>
+          <span>${escapeHtml(formatRelative(r.checkedInAt))}${r.autoCheckedIn ? ' (auto)' : ''}</span>
+        </div>
+      </div>
+      <div class="row-actions">
+        <button class="icon-btn" data-action="undo" title="Undo check-in" aria-label="Undo check-in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        </button>
+      </div>
+    `;
+
+    row.querySelector('[data-action="undo"]').addEventListener('click', e => {
+      e.stopPropagation();
+      openUndoCheckinDialog(r);
+    });
+    row.addEventListener('click', () => openRegistrationDetail(r));
+
+    wrap.appendChild(row);
+  });
+}
+
+async function performCheckinSearch() {
+  const q = $('#checkinSearch').value.trim();
+  const result = $('#checkinResult');
+  result.classList.remove('show');
+
+  if (!q) { toast('Enter a name, email, phone, or ticket ID', 'warning'); return; }
+
+  result.className = 'checkin-result show';
+  result.innerHTML = `
+    <div style="padding: var(--s-5); text-align: center; color: var(--text-3);">
+      <div class="spinner" style="width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px;"></div>
+      Searching…
+    </div>
+  `;
+
+  try {
+    const data = await api('search_registrations', { query: { q } });
+    const results = data.results || [];
+
+    if (!results.length) {
+      result.className = 'checkin-result show error';
+      result.innerHTML = `
+        <div class="cr-head">
+          <div class="cr-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="cr-info">
+            <div class="cr-name">No match found</div>
+            <div class="cr-status">Check the spelling or try the ticket ID</div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    renderCheckinResult(results[0]);
+  } catch (err) {
+    result.className = 'checkin-result show error';
+    result.innerHTML = `
+      <div class="cr-head">
+        <div class="cr-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="cr-info">
+          <div class="cr-name">Couldn't search</div>
+          <div class="cr-status">${escapeHtml(err.message)}</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderCheckinResult(r) {
+  const result = $('#checkinResult');
+  const tt = state.ticketTypes.find(t => t.id === r.ticketTypeId);
+
+  let statusClass = 'success';
+  let statusIcon = '<polyline points="20 6 9 17 4 12"/>';
+  let statusTitle = 'Ready to check in';
+  let statusSub = 'Tap below to check them in';
+
+  if (r.status === 'pending') {
+    statusClass = 'warning';
+    statusIcon = '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>';
+    statusTitle = 'Registration is pending';
+    statusSub = 'They can\'t be checked in until approved';
+  } else if (r.status === 'rejected') {
+    statusClass = 'error';
+    statusIcon = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+    statusTitle = 'Registration was rejected';
+    statusSub = 'They can\'t be checked in';
+  } else if (r.checkedInAt) {
+    statusClass = 'warning';
+    statusIcon = '<polyline points="20 6 9 17 4 12"/>';
+    statusTitle = 'Already checked in';
+    statusSub = `${formatRelative(r.checkedInAt)}${r.autoCheckedIn ? ' — automatically' : ''}`;
+  }
+
+  result.className = 'checkin-result show ' + statusClass;
+
+  result.innerHTML = `
+    <div class="cr-head">
+      <div class="cr-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${statusIcon}</svg>
+      </div>
+      <div class="cr-info">
+        <div class="cr-name">${escapeHtml(r.name)}</div>
+        <div class="cr-status">${escapeHtml(statusTitle)} · ${escapeHtml(statusSub)}</div>
+      </div>
+    </div>
+    <div class="cr-body">
+      <div class="cr-grid">
+        <div>
+          <div class="cr-label">Ticket ID</div>
+          <div class="cr-value" style="font-family: var(--f-mono); letter-spacing: 0.5px;">${escapeHtml(r.uid)}</div>
+        </div>
+        <div>
+          <div class="cr-label">Ticket type</div>
+          <div class="cr-value">${escapeHtml(tt?.name || '—')}</div>
+        </div>
+        <div>
+          <div class="cr-label">Email</div>
+          <div class="cr-value" style="font-size: 12.5px; word-break: break-all;">${escapeHtml(r.email)}</div>
+        </div>
+        <div>
+          <div class="cr-label">Phone</div>
+          <div class="cr-value">${escapeHtml(r.phone || '—')}</div>
+        </div>
+      </div>
+      <div class="cr-actions">
+        ${r.status === 'approved' && !r.checkedInAt ? `
+          <button class="btn btn-success btn-block" id="doCheckinBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="20 6 9 17 4 12"/></svg>
+            Check in now
+          </button>
+        ` : ''}
+        ${r.checkedInAt ? `
+          <button class="btn btn-secondary btn-block" id="undoCheckinBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+            Undo check-in
+          </button>
+        ` : ''}
+        <button class="btn btn-ghost btn-block" id="clearResultBtn">Clear</button>
+      </div>
+    </div>
+  `;
+
+  $('#doCheckinBtn')?.addEventListener('click', () => doCheckin(r));
+  $('#undoCheckinBtn')?.addEventListener('click', () => openUndoCheckinDialog(r));
+  $('#clearResultBtn')?.addEventListener('click', () => {
+    result.classList.remove('show');
+    $('#checkinSearch').value = '';
+    $('#checkinSearch').focus();
+  });
+}
+
+async function doCheckin(r) {
+  const btn = $('#doCheckinBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Checking in…</span>'; }
+
+  try {
+    await api('check_in', {
+      method: 'POST',
+      body: { eventId: state.eventId, registrationId: r.id }
+    });
+    toast(`${r.name} checked in`, 'success', 3000);
+    $('#checkinSearch').value = '';
+    $('#checkinResult').classList.remove('show');
+    loadCheckin();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.innerHTML = 'Check in now'; }
+    toast(err.message || 'Couldn\'t check in', 'error', 5000);
+  }
+}
+
+function openUndoCheckinDialog(r) {
+  openDialog({
+    icon: 'warning',
+    title: 'Undo check-in?',
+    sub: r.name,
+    body: `
+      <p style="font-size: 13.5px; line-height: 1.55; margin: 0;">
+        This will remove <strong>${escapeHtml(r.name)}</strong>'s check-in. They'll need to be checked in again when they arrive.
+      </p>
+    `,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Undo check-in', variant: 'danger', onClick: () => doUndoCheckin(r) }
+    ]
+  });
+}
+
+async function doUndoCheckin(r) {
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Undo check-in');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Working…</span>'; }
+
+  try {
+    await api('undo_check_in', {
+      method: 'DELETE',
+      query: { id: r.id }
+    });
+    closeDialog();
+    toast('Check-in removed', 'info', 3000);
+    $('#checkinResult').classList.remove('show');
+    loadCheckin();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Undo check-in'; }
+    toast(err.message || 'Couldn\'t undo', 'error', 5000);
+  }
+}
+
+/* ============================================================
+   TICKET TYPES
+   ============================================================ */
+$('#refreshTicketsBtn').addEventListener('click', () => loadTicketTypes(true));
+$('#newTicketBtn').addEventListener('click', openNewTicketDialog);
+
+async function loadTicketTypes() {
+  const wrap = $('#ticketsContent');
+  wrap.innerHTML = `
+    <div class="card"><div class="card-body tight">
+      ${[...Array(3)].map(() => '<div class="skeleton skel-row" style="margin: 8px 20px;"></div>').join('')}
+    </div></div>
+  `;
+
+  try {
+    const data = await api('get_event');
+    state.ticketTypes = data.ticketTypes || [];
+    renderTicketTypes();
+  } catch (err) {
+    wrap.innerHTML = `
+      <div class="card"><div class="empty">
+        <div class="empty-icon" style="background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Couldn't load ticket types</h3>
+        <p>${escapeHtml(err.message)}</p>
+        <button class="btn btn-primary" id="retryTickets">Try again</button>
+      </div></div>
+    `;
+    $('#retryTickets').addEventListener('click', () => loadTicketTypes());
+  }
+}
+
+function renderTicketTypes() {
+  const wrap = $('#ticketsContent');
+  const tts = state.ticketTypes || [];
+
+  if (!tts.length) {
+    wrap.innerHTML = `
+      <div class="card"><div class="empty">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2z"/></svg>
+        </div>
+        <h3>No ticket types yet</h3>
+        <p>Ticket types are what attendees choose from when they register.</p>
+        <button class="btn btn-primary" id="emptyNewTicket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create ticket type
+        </button>
+      </div></div>
+    `;
+    $('#emptyNewTicket')?.addEventListener('click', openNewTicketDialog);
+    return;
+  }
+
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Ticket types</h2>
+          <div class="card-sub">${tts.length} type${tts.length === 1 ? '' : 's'}</div>
+        </div>
+      </div>
+      <div class="card-body tight" id="ttList"></div>
+    </div>
+  `;
+
+  const list = $('#ttList');
+  tts.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const isInactive = t.active === false;
+
+    row.innerHTML = `
+      <div class="row-lead ${isInactive ? '' : 'accent'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2z"/></svg>
+      </div>
+      <div class="row-info">
+        <div class="row-title">
+          ${escapeHtml(t.name)}
+          ${isInactive ? '<span class="badge danger"><span class="dot"></span> Inactive</span>' : ''}
+        </div>
+        <div class="row-meta">
+          <span>₦${Number(t.price || 0).toLocaleString()}</span>
+          ${t.capacity ? `<span class="sep">·</span><span>Capacity: ${t.capacity}</span>` : ''}
+        </div>
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-secondary btn-sm" data-action="edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit
+        </button>
+        ${!isInactive ? `
+          <button class="btn btn-danger-outline btn-sm" data-action="deactivate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            Deactivate
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    row.querySelector('[data-action="edit"]').addEventListener('click', e => {
+      e.stopPropagation();
+      openEditTicketDialog(t);
+    });
+    row.querySelector('[data-action="deactivate"]')?.addEventListener('click', e => {
+      e.stopPropagation();
+      openDeactivateTicketDialog(t);
+    });
+
+    list.appendChild(row);
+  });
+}
+
+function openNewTicketDialog() {
+  const form = document.createElement('form');
+  form.innerHTML = `
+    <div class="field" data-field="name">
+      <label class="label" for="tt-name">Ticket name <span class="req">*</span></label>
+      <input class="input" id="tt-name" type="text" placeholder="General Pass" required>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter a name</span></div>
+    </div>
+
+    <div class="form-row two">
+      <div class="field" data-field="price">
+        <label class="label" for="tt-price">Price (₦) <span class="req">*</span></label>
+        <input class="input" id="tt-price" type="number" inputmode="numeric" min="0" placeholder="25000" required>
+        <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter a price</span></div>
+      </div>
+      <div class="field" data-field="capacity">
+        <label class="label" for="tt-capacity">Capacity <span class="hint">Optional</span></label>
+        <input class="input" id="tt-capacity" type="number" inputmode="numeric" min="1" placeholder="e.g. 100">
+        <div class="help">Leave blank for unlimited.</div>
+      </div>
+    </div>
+  `;
+
+  openDialog({
+    icon: 'info',
+    title: 'New ticket type',
+    sub: 'Attendees will see this when registering.',
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Create', variant: 'primary', onClick: () => submitNewTicket(form) }
+    ]
+  });
+}
+
+async function submitNewTicket(form) {
+  const get = id => form.querySelector(`#${id}`).value.trim();
+  const clearErr = k => form.querySelector(`[data-field="${k}"]`)?.classList.remove('error');
+  const setErr = k => form.querySelector(`[data-field="${k}"]`)?.classList.add('error');
+
+  const name = get('tt-name');
+  const price = get('tt-price');
+  const capacity = get('tt-capacity');
+
+  ['name','price'].forEach(clearErr);
+
+  let valid = true;
+  if (!name || name.length < 2) { setErr('name'); valid = false; }
+  if (!price || isNaN(Number(price)) || Number(price) < 0) { setErr('price'); valid = false; }
+  if (!valid) { toast('Please fix the highlighted fields', 'error'); return; }
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Create');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Creating…</span>'; }
+
+  try {
+    const body = { eventId: state.eventId, name, price: Number(price) };
+    if (capacity && !isNaN(Number(capacity))) body.capacity = Number(capacity);
+
+    await api('create_ticket_type', { method: 'POST', body });
+    closeDialog();
+    toast('Ticket type created', 'success');
+    loadTicketTypes();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Create'; }
+    toast(err.message || 'Couldn\'t create', 'error', 5000);
+  }
+}
+
+function openEditTicketDialog(t) {
+  const form = document.createElement('form');
+  form.innerHTML = `
+    <div class="field" data-field="name">
+      <label class="label" for="et-name">Ticket name <span class="req">*</span></label>
+      <input class="input" id="et-name" type="text" value="${escapeHtml(t.name)}" required>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter a name</span></div>
+    </div>
+
+    <div class="form-row two">
+      <div class="field" data-field="price">
+        <label class="label" for="et-price">Price (₦) <span class="req">*</span></label>
+        <input class="input" id="et-price" type="number" inputmode="numeric" min="0" value="${Number(t.price || 0)}" required>
+        <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter a price</span></div>
+      </div>
+      <div class="field" data-field="capacity">
+        <label class="label" for="et-capacity">Capacity <span class="hint">Optional</span></label>
+        <input class="input" id="et-capacity" type="number" inputmode="numeric" min="1" value="${t.capacity || ''}">
+        <div class="help">Leave blank for unlimited.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field" style="margin-bottom: 0;">
+      <label class="label">
+        <span>Active</span>
+        <span class="hint">Attendees can pick this ticket</span>
+      </label>
+      <div class="flex-gap">
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="true" ${t.active !== false ? 'style="border-color: var(--accent); background: var(--accent-soft);"' : ''}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><polyline points="20 6 9 17 4 12"/></svg>
+          Active
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="false" ${t.active === false ? 'style="border-color: var(--danger); background: var(--danger-bg); color: var(--danger);"' : ''}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          Inactive
+        </button>
+      </div>
+    </div>
+  `;
+
+  let activeState = t.active !== false;
+  form.querySelectorAll('[data-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeState = btn.dataset.toggle === 'true';
+      form.querySelectorAll('[data-toggle]').forEach(b => b.removeAttribute('style'));
+      if (activeState) {
+        form.querySelector('[data-toggle="true"]').style.cssText = 'border-color: var(--accent); background: var(--accent-soft);';
+      } else {
+        form.querySelector('[data-toggle="false"]').style.cssText = 'border-color: var(--danger); background: var(--danger-bg); color: var(--danger);';
+      }
+    });
+  });
+
+  openDialog({
+    icon: 'info',
+    title: 'Edit ticket type',
+    sub: t.name,
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Save changes', variant: 'primary', onClick: () => submitEditTicket(form, t, () => activeState) }
+    ]
+  });
+}
+
+async function submitEditTicket(form, t, getActive) {
+  const get = id => form.querySelector(`#${id}`).value.trim();
+  const name = get('et-name');
+  const price = get('et-price');
+  const capacity = get('et-capacity');
+
+  if (!name || name.length < 2) { form.querySelector('[data-field="name"]').classList.add('error'); return; }
+  if (!price || isNaN(Number(price)) || Number(price) < 0) { form.querySelector('[data-field="price"]').classList.add('error'); return; }
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent.includes('Save'));
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Saving…</span>'; }
+
+  try {
+    await api('update_ticket_type', {
+      method: 'PUT',
+      body: {
+        eventId: state.eventId,
+        ticketTypeId: t.id,
+        name,
+        price: Number(price),
+        capacity: capacity && !isNaN(Number(capacity)) ? Number(capacity) : null,
+        active: getActive()
+      }
+    });
+    closeDialog();
+    toast('Ticket type updated', 'success');
+    loadTicketTypes();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Save changes'; }
+    toast(err.message || 'Couldn\'t save', 'error', 5000);
+  }
+}
+
+function openDeactivateTicketDialog(t) {
+  openDialog({
+    icon: 'warning',
+    title: 'Deactivate this ticket type?',
+    sub: t.name,
+    body: `
+      <p style="font-size: 13.5px; line-height: 1.55; margin: 0;">
+        Attendees won't be able to pick <strong>${escapeHtml(t.name)}</strong> anymore. Existing registrations keep their ticket type.
+      </p>
+    `,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Deactivate', variant: 'danger', onClick: () => doDeactivateTicket(t) }
+    ]
+  });
+}
+
+async function doDeactivateTicket(t) {
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Deactivate');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Working…</span>'; }
+
+  try {
+    await api('delete_ticket_type', {
+      method: 'DELETE',
+      query: { id: t.id }
+    });
+    closeDialog();
+    toast('Ticket type deactivated', 'info');
+    loadTicketTypes();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Deactivate'; }
+    toast(err.message || 'Couldn\'t deactivate', 'error', 5000);
+  }
+}
+
+/* ============================================================
+   AUTO-CHECKIN
+   ============================================================ */
+$('#refreshAcBtn').addEventListener('click', () => loadAutoCheckin(true));
+
+async function loadAutoCheckin() {
+  const wrap = $('#acContent');
+  wrap.innerHTML = '<div class="card"><div class="skeleton" style="height: 200px; margin: var(--s-5);"></div></div>';
+
+  try {
+    const data = await api('auto_checkin', { query: { autoCheckinAction: 'status' } });
+    state.acStatus = data.autoCheckin;
+    renderAutoCheckin();
+  } catch (err) {
+    wrap.innerHTML = `
+      <div class="card"><div class="empty">
+        <div class="empty-icon" style="background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Couldn't load status</h3>
+        <p>${escapeHtml(err.message)}</p>
+        <button class="btn btn-primary" id="retryAc">Try again</button>
+      </div></div>
+    `;
+    $('#retryAc').addEventListener('click', () => loadAutoCheckin());
+  }
+}
+
+function renderAutoCheckin() {
+  const wrap = $('#acContent');
+  const ac = state.acStatus;
+
+  if (!ac || !ac.enabled) {
+    wrap.innerHTML = `
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Auto-checkin</h2>
+            <div class="card-sub">Currently disabled</div>
+          </div>
+          <span class="badge neutral">Disabled</span>
+        </div>
+        <div class="card-body">
+          <p style="font-size: 13.5px; line-height: 1.55; margin: 0 0 var(--s-4); color: var(--text-2);">
+            Enable to issue a token. Attendees who used it during registration will be automatically checked in the moment their payment is approved.
+          </p>
+          <button class="btn btn-primary" id="enableAcBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="20 6 9 17 4 12"/></svg>
+            Enable auto-checkin
+          </button>
+        </div>
+      </div>
+    `;
+    $('#enableAcBtn').addEventListener('click', openEnableAcDialog);
+    return;
+  }
+
+  const status = ac.status || {};
+  const isValid = status.valid;
+  const remainingMs = status.timeRemainingMs || 0;
+  const totalMs = (ac.durationMinutes || 60) * 60 * 1000;
+  const pct = isValid ? Math.max(0, Math.min(100, (remainingMs / totalMs) * 100)) : 0;
+  const barClass = pct > 50 ? '' : pct > 20 ? 'warn' : 'danger';
+
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Active token</h2>
+          <div class="card-sub">${ac.isCustom ? 'Custom token' : 'Auto-generated'}</div>
+        </div>
+        ${isValid
+          ? `<span class="badge success"><span class="dot"></span> Active</span>`
+          : `<span class="badge danger"><span class="dot"></span> Expired</span>`}
+      </div>
+      <div class="card-body">
+        <div class="token-box">
+          <span class="token">${escapeHtml(ac.token || '—')}</span>
+          <button class="icon-btn" data-copy="${escapeHtml(ac.token || '')}" aria-label="Copy token">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+
+        ${isValid ? `
+          <div style="margin-top: var(--s-4);">
+            <div class="flex-between" style="font-size: 13px; margin-bottom: 4px;">
+              <span style="color: var(--text-2); font-weight: 600;">Time remaining</span>
+              <span style="font-weight: 700;">${formatDuration(remainingMs)}</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill ${barClass}" style="width: ${pct}%;"></div>
+            </div>
+            <div class="text-sm" style="margin-top: 4px;">Expires ${escapeHtml(formatDate(ac.expiresAt))}</div>
+          </div>
+        ` : `
+          <div class="notice danger" style="margin-top: var(--s-4); margin-bottom: 0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="notice-body">
+              <div class="notice-text">${escapeHtml(status.message || 'This token has expired')}. Regenerate to issue a new one.</div>
+            </div>
+          </div>
+        `}
+      </div>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="stat">
+        <div class="stat-label">Auto check-ins</div>
+        <div class="stat-value">${ac.autoCheckinCount || 0}</div>
+        <div class="stat-sub">Attendees checked in automatically</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Extensions</div>
+        <div class="stat-value">${ac.extensionCount || 0}</div>
+        <div class="stat-sub">Times extended</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Actions</h2>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="flex-gap">
+          <button class="btn btn-secondary" id="extendAcBtn" ${!isValid ? 'disabled' : ''}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Extend +30 min
+          </button>
+          <button class="btn btn-secondary" id="regenAcBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Regenerate token
+          </button>
+          <button class="btn btn-danger-outline" id="disableAcBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Disable
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  wrap.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.classList.add('copied');
+        toast('Token copied', 'success', 2000);
+        setTimeout(() => btn.classList.remove('copied'), 1400);
+      } catch { toast('Copy failed', 'error'); }
+    });
+  });
+
+  $('#extendAcBtn')?.addEventListener('click', extendAc);
+  $('#regenAcBtn')?.addEventListener('click', () => confirmRegenAc());
+  $('#disableAcBtn')?.addEventListener('click', () => confirmDisableAc());
+}
+
+function openEnableAcDialog() {
+  const form = document.createElement('form');
+  form.innerHTML = `
+    <div class="field">
+      <label class="label" for="ac-dur">Duration</label>
+      <select class="select" id="ac-dur">
+        <option value="15">15 minutes</option>
+        <option value="30">30 minutes</option>
+        <option value="60" selected>1 hour</option>
+        <option value="90">1 hour 30 minutes</option>
+        <option value="120">2 hours (max)</option>
+      </select>
+      <div class="help">After this window, the token stops working.</div>
+    </div>
+
+    <div class="field" data-field="token">
+      <label class="label" for="ac-tok">
+        <span>Custom token <span class="hint">Optional</span></span>
+      </label>
+      <input class="input input-mono" id="ac-tok" type="text" maxlength="20" placeholder="Leave blank to auto-generate">
+      <div class="help">4–20 chars, start with a letter, only A–Z 0–9 _ -</div>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Invalid token format</span></div>
+    </div>
+  `;
+
+  openDialog({
+    icon: 'info',
+    title: 'Enable auto-checkin',
+    sub: 'A token will be generated and shown after.',
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Enable', variant: 'primary', onClick: () => submitEnableAc(form) }
+    ]
+  });
+}
+
+async function submitEnableAc(form) {
+  const duration = parseInt(form.querySelector('#ac-dur').value, 10) || 60;
+  const customToken = form.querySelector('#ac-tok').value.trim();
+
+  if (customToken) {
+    const re = /^[A-Za-z][A-Za-z0-9_-]{3,19}$/;
+    if (!re.test(customToken)) {
+      form.querySelector('[data-field="token"]').classList.add('error');
+      toast('Invalid token format', 'error', 4000);
+      return;
+    }
+  }
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Enable');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Enabling…</span>'; }
+
+  try {
+    const body = { eventId: state.eventId, autoCheckinAction: 'toggle', enabled: true, duration };
+    if (customToken) body.customToken = customToken;
+    await api('auto_checkin', { method: 'POST', body });
+    closeDialog();
+    toast('Auto-checkin enabled', 'success');
+    loadAutoCheckin();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Enable'; }
+    toast(err.message || 'Couldn\'t enable', 'error', 5000);
+  }
+}
+
+async function extendAc() {
+  const btn = $('#extendAcBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Extending…</span>'; }
+  try {
+    await api('auto_checkin', {
+      method: 'POST',
+      body: { eventId: state.eventId, autoCheckinAction: 'extend', extraMinutes: 30 }
+    });
+    toast('Extended by 30 minutes', 'success');
+    loadAutoCheckin();
+  } catch (err) {
+    toast(err.message || 'Couldn\'t extend', 'error', 5000);
+    loadAutoCheckin();
+  }
+}
+
+function confirmRegenAc() {
+  openDialog({
+    icon: 'warning',
+    title: 'Regenerate token?',
+    sub: 'The current token stops working immediately.',
+    body: '<p style="font-size: 13.5px; line-height: 1.55; margin: 0;">A new token will be issued with a fresh 1-hour timer. Attendees who already used the old token keep their auto-checkin.</p>',
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Regenerate', variant: 'primary', onClick: doRegenAc }
+    ]
+  });
+}
+
+async function doRegenAc() {
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Regenerate');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Working…</span>'; }
+  try {
+    await api('auto_checkin', {
+      method: 'POST',
+      body: { eventId: state.eventId, autoCheckinAction: 'regenerate', duration: 60 }
+    });
+    closeDialog();
+    toast('New token generated', 'success');
+    loadAutoCheckin();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Regenerate'; }
+    toast(err.message || 'Couldn\'t regenerate', 'error', 5000);
+  }
+}
+
+function confirmDisableAc() {
+  openDialog({
+    icon: 'danger',
+    title: 'Disable auto-checkin?',
+    sub: 'The current token stops working.',
+    body: '<p style="font-size: 13.5px; line-height: 1.55; margin: 0;">Attendees with this token will no longer be auto-checked-in when approved.</p>',
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Disable', variant: 'danger', onClick: doDisableAc }
+    ]
+  });
+}
+
+async function doDisableAc() {
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Disable');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Working…</span>'; }
+  try {
+    await api('auto_checkin', {
+      method: 'POST',
+      body: { eventId: state.eventId, autoCheckinAction: 'toggle', enabled: false }
+    });
+    closeDialog();
+    toast('Auto-checkin disabled', 'info');
+    loadAutoCheckin();
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Disable'; }
+    toast(err.message || 'Couldn\'t disable', 'error', 5000);
+  }
+}
+
+/* ============================================================
+   ACCOUNT
+   ============================================================ */
+async function loadAccount() {
+  const wrap = $('#accountContent');
+  const a = state.admin || {};
+
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Your profile</h2>
+          <div class="card-sub">Managed by your event organizer</div>
+        </div>
+      </div>
+      <div class="card-body tight">
+        <div class="row" style="cursor: default;">
+          <div class="row-info">
+            <div class="row-title">Display name</div>
+            <div class="row-meta">${escapeHtml(a.label || '—')}</div>
+          </div>
+        </div>
+        <div class="row" style="cursor: default;">
+          <div class="row-info">
+            <div class="row-title">Email</div>
+            <div class="row-meta">${escapeHtml(a.email || '—')}</div>
+          </div>
+        </div>
+        <div class="row" style="cursor: default;">
+          <div class="row-info">
+            <div class="row-title">Role</div>
+            <div class="row-meta">
+              <span class="badge ${a.role === 'payment_admin' ? 'payment' : 'checkin'}">
+                ${escapeHtml(a.role === 'payment_admin' ? 'Payment admin' : 'Check-in admin')}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Password</h2>
+          <div class="card-sub">Change your sign-in password</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <button class="btn btn-secondary" id="changePassBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Change password
+        </button>
+      </div>
+    </div>
+  `;
+
+  $('#changePassBtn').addEventListener('click', openChangePasswordDialog);
+}
+
+function openChangePasswordDialog() {
+  const form = document.createElement('form');
+  form.innerHTML = `
+    <div class="field" data-field="current">
+      <label class="label" for="cp-cur">Current password <span class="req">*</span></label>
+      <input class="input" id="cp-cur" type="password" autocomplete="current-password" required>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Enter your current password</span></div>
+    </div>
+
+    <div class="field" data-field="new">
+      <label class="label" for="cp-new">New password <span class="req">*</span></label>
+      <input class="input" id="cp-new" type="password" autocomplete="new-password" minlength="8" required>
+      <div class="help">At least 8 characters.</div>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Password must be at least 8 characters</span></div>
+    </div>
+
+    <div class="field" data-field="confirm">
+      <label class="label" for="cp-conf">Confirm new password <span class="req">*</span></label>
+      <input class="input" id="cp-conf" type="password" autocomplete="new-password" required>
+      <div class="error-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Passwords don't match</span></div>
+    </div>
+  `;
+
+  openDialog({
+    icon: 'info',
+    title: 'Change password',
+    sub: 'Choose a new password for your account.',
+    body: form,
+    actions: [
+      { label: 'Cancel', variant: 'secondary', onClick: closeDialog },
+      { label: 'Change password', variant: 'primary', onClick: () => submitChangePassword(form) }
+    ]
+  });
+}
+
+async function submitChangePassword(form) {
+  const cur = form.querySelector('#cp-cur').value;
+  const nw = form.querySelector('#cp-new').value;
+  const cf = form.querySelector('#cp-conf').value;
+
+  const clearErr = k => form.querySelector(`[data-field="${k}"]`)?.classList.remove('error');
+  const setErr = k => form.querySelector(`[data-field="${k}"]`)?.classList.add('error');
+  ['current','new','confirm'].forEach(clearErr);
+
+  let valid = true;
+  if (!cur) { setErr('current'); valid = false; }
+  if (!nw || nw.length < 8) { setErr('new'); valid = false; }
+  if (nw !== cf) { setErr('confirm'); valid = false; }
+  if (!valid) return;
+
+  const btn = Array.from($('#dialogActions').children).find(b => b.textContent === 'Change password');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span><span>Changing…</span>'; }
+
+  try {
+    await api('change_password', {
+      method: 'POST',
+      body: { currentPassword: cur, newPassword: nw }
+    });
+    closeDialog();
+    toast('Password changed', 'success', 3000);
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Change password'; }
+    if (err.status === 401) {
+      form.querySelector('[data-field="current"]').classList.add('error');
+      form.querySelector('[data-field="current"] .error-msg span').textContent = 'Current password is incorrect';
+    } else {
+      toast(err.message || 'Couldn\'t change password', 'error', 5000);
+    }
+  }
+}
+
+/* ============================================================
+   MISC
+   ============================================================ */
+window.addEventListener('online', () => toast('Back online', 'success', 2000));
+window.addEventListener('offline', () => toast('You\'re offline', 'warning', 4000));
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && state.admin && state.currentView === 'checkin') {
+    loadRecentCheckins();
+  }
+});
+</script>
+</body>
+</html>
