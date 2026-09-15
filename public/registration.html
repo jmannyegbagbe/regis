@@ -1815,6 +1815,7 @@ h1 {
 
 <script>
 const API_URL = 'https://kxevents.vercel.app/api/temp-events';
+const EVENT_ID = 'rotract-installation-ceremony-187e';
 const EMAIL_STORAGE_KEY = 'kx_reg_email';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -1983,7 +1984,7 @@ function hideSavedChip() {
 function getUrlParams() {
   const p = new URLSearchParams(window.location.search);
   return {
-    eventId: p.get('event') || p.get('eventId') || p.get('e') || null,
+    eventId: p.get('event') || p.get('eventId') || p.get('e') || EVENT_ID,
     token: p.get('token') || null
   };
 }
