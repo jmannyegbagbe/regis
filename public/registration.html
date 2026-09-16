@@ -1983,7 +1983,7 @@ function hideSavedChip() {
 function getUrlParams() {
   const p = new URLSearchParams(window.location.search);
   return {
-    eventId: p.get('event') || p.get('eventId') || p.get('e') || 'rotract-installation-ceremony-187e',
+    eventId: p.get('event') || p.get('eventId') || p.get('e') || null,
     token: p.get('token') || null
   };
 }
