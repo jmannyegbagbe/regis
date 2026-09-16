@@ -1471,24 +1471,24 @@ h1 {
         <h1>Choose your ticket</h1>
         <p class="lede">Pick the option that fits you best.</p>
 
-        <div class="field" id="f-ticketType">
-          <div class="ticket-types" id="ticketTypes" role="radiogroup" aria-label="Ticket type"></div>
-          <div class="error-msg" role="alert">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span>Please choose a ticket</span>
-          </div>
-        </div>
+  <div class="field" id="f-ticketType">
+    <div class="ticket-types" id="ticketTypes" role="radiogroup" aria-label="Ticket type"></div>
+    <div class="error-msg" role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Please choose a ticket</span>
+    </div>
+  </div>
 
-        <div class="field hidden" id="f-clubAffiliation">
-          <label class="label" for="inp-clubAffiliation"><span id="clubAffiliationLabel">Club affiliation <span class="req" aria-hidden="true">*</span></span></label>
-          <input class="input" id="inp-clubAffiliation" type="text" autocomplete="organization" placeholder="Enter your club name">
-          <div class="error-msg" role="alert">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span id="clubAffiliationError">Enter your club name</span>
-          </div>
-        </div>
+  <div class="field" id="f-club" hidden>
+    <label class="label" for="inp-club"><span id="clubLabel">Club affiliation <span class="req">*</span></span></label>
+    <input class="input" id="inp-club" type="text" autocomplete="organization" placeholder="Enter your club name">
+    <div class="error-msg" role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Please enter your club affiliation</span>
+    </div>
+  </div>
 
-        <button class="btn btn-primary" id="toPayment" type="button">
+  <button class="btn btn-primary" id="toPayment" type="button">
           Continue
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
@@ -1815,7 +1815,6 @@ h1 {
 
 <script>
 const API_URL = 'https://kxevents.vercel.app/api/temp-events';
-const EVENT_ID = 'rotract-installation-ceremony-187e';
 const EMAIL_STORAGE_KEY = 'kx_reg_email';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -1837,8 +1836,8 @@ const state = {
   email: '',
   name: '',
   phone: '',
-  clubAffiliation: '',
   ticketTypeId: null,
+  clubAffiliation: '',
   receipt: null,
   receiptBase64: null,
   uid: null,
@@ -1984,7 +1983,7 @@ function hideSavedChip() {
 function getUrlParams() {
   const p = new URLSearchParams(window.location.search);
   return {
-    eventId: p.get('event') || p.get('eventId') || p.get('e') || EVENT_ID,
+    eventId: p.get('event') || p.get('eventId') || p.get('e') || 'rotract-installation-ceremony-187e',
     token: p.get('token') || null
   };
 }
@@ -2017,11 +2016,7 @@ async function boot() {
     }
 
     state.event = data.event;
-    state.ticketTypes = [
-    { id: 'rotarians', name: 'Rotarians', price: 6000 },
-    { id: 'guests', name: 'Guests', price: 3000 },
-    { id: 'rotaractors', name: 'Rotaractors', price: 3500 }
-  ];
+    state.ticketTypes = (data.ticketTypes || []).filter(t => t.active !== false);
     state.autoCheckinValid = !!data.autoCheckin?.tokenValid;
 
     applyWhatsappLinks();
@@ -2229,10 +2224,9 @@ async function runEmailCheck(email, { silent = false } = {}) {
     saveEmail(email);
 
     if (!data.registered) {
-  state.name = '';
-  state.phone = '';
-  state.clubAffiliation = '';
-  state.ticketTypeId = null;
+      state.name = '';
+      state.phone = '';
+      state.ticketTypeId = null;
       state.receipt = null;
       state.receiptBase64 = null;
       state.uid = null;
@@ -2296,7 +2290,6 @@ $('#savedChipRemove').addEventListener('click', () => {
 
 $('#inp-name').addEventListener('input', () => clearError('f-name'));
 $('#inp-phone').addEventListener('input', () => clearError('f-phone'));
-$('#inp-clubAffiliation').addEventListener('input', () => clearError('f-clubAffiliation'));
 
 $('#detailsForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -2314,90 +2307,76 @@ $('#detailsForm').addEventListener('submit', e => {
 
   state.name = name;
   state.phone = phone;
-  state.clubAffiliation = '';
-  $('#inp-clubAffiliation').value = '';
-  $('#f-clubAffiliation').classList.add('hidden');
   goToScreen('ticket');
 });
 
+function ticketCategory(ticket) {
+  const name = String(ticket?.name || '').toLowerCase();
+  if (name.includes('rotaractor')) return 'rotaractor';
+  if (name.includes('rotarian')) return 'rotarian';
+  if (name.includes('guest')) return 'guest';
+  return null;
+}
+
+function updateClubField() {
+  const ticket = state.ticketTypes.find(t => t.id === state.ticketTypeId);
+  const category = ticketCategory(ticket);
+  const field = $('#f-club');
+  const input = $('#inp-club');
+  const label = $('#clubLabel');
+  if (category === 'rotarian' || category === 'rotaractor') {
+    field.hidden = false;
+    label.firstChild.textContent = category === 'rotarian' ? 'What Rotarian club are you from? ' : 'What Rotaractor club are you from? ';
+  } else {
+    field.hidden = true;
+    input.value = '';
+    state.clubAffiliation = '';
+    clearError('f-club');
+  }
+}
+
 function renderTicketTypes() {
   const wrap = $('#ticketTypes');
-  const tts = [
-    { id: 'rotarians', name: 'Rotarians', price: 6000 },
-    { id: 'guests', name: 'Guests', price: 3000 },
-    { id: 'rotaractors', name: 'Rotaractors', price: 3500 }
+  const configured = (state.ticketTypes || []).filter(t => ticketCategory(t));
+  const prices = { rotarian: 6000, guest: 3000, rotaractor: 3500 };
+  const tts = configured.length ? configured : [
+    { id: 'rotarian', name: 'Rotarians' },
+    { id: 'guest', name: 'Guests' },
+    { id: 'rotaractor', name: 'Rotaractors' }
   ];
-
-  if (!tts.length) {
-    wrap.innerHTML = `<div class="notice info" style="margin:0;"><div class="notice-body"><div class="notice-text">No ticket types are available right now.</div></div></div>`;
-    return;
-  }
-
   wrap.innerHTML = tts.map(t => {
+    const category = ticketCategory(t) || t.id;
     const selected = state.ticketTypeId === t.id;
-    const priceNum = Number(t.price || 0);
-    const priceStr = priceNum > 0 ? `₦${priceNum.toLocaleString()}` : 'Free';
-    const capLine = t.capacity ? `<span class="tt-cap">Capacity: ${t.capacity}</span>` : '';
-    return `
-      <button type="button" class="ticket-type ${selected ? 'selected' : ''}"
-              role="radio" aria-checked="${selected}" data-id="${escapeHtml(t.id)}">
-        <span class="tt-radio" aria-hidden="true"></span>
-        <span class="tt-info">
-          <span class="tt-name">${escapeHtml(t.name || 'Ticket')}</span>
-          ${capLine}
-        </span>
-        <span class="tt-price">${priceStr}</span>
-      </button>
-    `;
+    const priceNum = prices[category] || Number(t.price || 0);
+    return `<button type="button" class="ticket-type ${selected ? 'selected' : ''}" role="radio" aria-checked="${selected}" data-id="${escapeHtml(t.id)}"><span class="tt-radio" aria-hidden="true"></span><span class="tt-info"><span class="tt-name">${escapeHtml(category === 'rotarian' ? 'Rotarians' : category === 'rotaractor' ? 'Rotaractors' : 'Guests')}</span></span><span class="tt-price">₦${priceNum.toLocaleString()}</span></button>`;
   }).join('');
-
-  wrap.querySelectorAll('.ticket-type').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.ticketTypeId = btn.dataset.id;
-      const clubField = $('#f-clubAffiliation');
-      const clubLabel = $('#clubAffiliationLabel');
-      const clubInput = $('#inp-clubAffiliation');
-      const selectedName = btn.querySelector('.tt-name')?.textContent || '';
-      const requiresClub = state.ticketTypeId === 'rotarians' || state.ticketTypeId === 'rotaractors';
-      if (requiresClub) {
-        const groupName = state.ticketTypeId === 'rotarians' ? 'Rotarian' : 'Rotaractor';
-        clubLabel.innerHTML = `What ${groupName} club are you from? <span class="req" aria-hidden="true">*</span>`;
-        clubInput.placeholder = `Enter your ${groupName.toLowerCase()} club name`;
-        clubField.classList.remove('hidden');
-      } else {
-        clubField.classList.add('hidden');
-        clubInput.value = '';
-        clearError('f-clubAffiliation');
-      }
-      renderTicketTypes();
-      clearError('f-ticketType');
-    });
-  });
+  wrap.querySelectorAll('.ticket-type').forEach(btn => btn.addEventListener('click', () => {
+    state.ticketTypeId = btn.dataset.id;
+    renderTicketTypes();
+    updateClubField();
+    clearError('f-ticketType');
+  }));
+  updateClubField();
 }
 
 $('#toPayment').addEventListener('click', () => {
+  const club = $('#inp-club').value.trim();
+  state.clubAffiliation = club;
+  const selectedTicket = state.ticketTypes.find(t => t.id === state.ticketTypeId);
+  const category = ticketCategory(selectedTicket);
+  if ((category === 'rotarian' || category === 'rotaractor') && !club) {
+    setError('f-club');
+    toast('Please enter your club affiliation', 'warning');
+    return;
+  }
+  clearError('f-club');
   if (!state.ticketTypeId) {
     setError('f-ticketType');
     toast('Please choose a ticket to continue', 'warning');
     return;
   }
 
-  const requiresClub = state.ticketTypeId === 'rotarians' || state.ticketTypeId === 'rotaractors';
-  const clubAffiliation = $('#inp-clubAffiliation').value.trim();
-  if (requiresClub && !clubAffiliation) {
-    setError('f-clubAffiliation');
-    toast('Please enter your club affiliation', 'warning');
-    $('#inp-clubAffiliation').focus({ preventScroll: true });
-    return;
-  }
-  clearError('f-clubAffiliation');
-  state.clubAffiliation = requiresClub ? clubAffiliation : '';
-
-  const tt = [
-    { id: 'rotarians', name: 'Rotarians', price: 6000 },
-    { id: 'guests', name: 'Guests', price: 3000 },
-    { id: 'rotaractors', name: 'Rotaractors', price: 3500 }
-  ].find(t => t.id === state.ticketTypeId);
+  const tt = state.ticketTypes.find(t => t.id === state.ticketTypeId);
   const priceNum = Number(tt?.price || 0);
   const priceStr = priceNum > 0 ? `₦${priceNum.toLocaleString()}` : 'Free';
 
